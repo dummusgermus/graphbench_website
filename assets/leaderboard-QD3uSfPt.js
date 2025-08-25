@@ -1,4 +1,4 @@
-import{r as a}from"./layout-Crauikd6.js";const d=[{model:"GCN",dataset:"OGBN-Arxiv",metric:"Acc",score:.724},{model:"GraphSAGE",dataset:"OGBN-Products",metric:"Acc",score:.812},{model:"GAT",dataset:"Reddit",metric:"F1",score:.942},{model:"GIN",dataset:"PPI",metric:"Micro-F1",score:.989}],o=`
+import{r as a}from"./layout-BKFLJM4_.js";const d=[{model:"GCN",dataset:"OGBN-Arxiv",metric:"Acc",score:.724},{model:"GraphSAGE",dataset:"OGBN-Products",metric:"Acc",score:.812},{model:"GAT",dataset:"Reddit",metric:"F1",score:.942},{model:"GIN",dataset:"PPI",metric:"Micro-F1",score:.989}],o=`
   <div class="card">
     <div style="overflow:auto">
       <table class="table" aria-label="Benchmark leaderboard">

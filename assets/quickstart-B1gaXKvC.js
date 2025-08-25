@@ -1,4 +1,4 @@
-import{r as a,e as s}from"./layout-Crauikd6.js";const e=document.querySelector("#app");e.innerHTML=a("quickstart",`
+import{r as a,e as s}from"./layout-BKFLJM4_.js";const e=document.querySelector("#app");e.innerHTML=a("quickstart",`
   <section class="page-header tight">
     <div class="container">
       <div class="title-row">
