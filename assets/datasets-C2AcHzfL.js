@@ -1,4 +1,4 @@
-import{r as p$}from"./layout-C3fnnbLW.js";/**
+import{r as p$}from"./layout-SwDyHynY.js";/**
  * @license
  * Copyright 2010-2025 Three.js Authors
  * SPDX-License-Identifier: MIT

@@ -5,7 +5,7 @@
         <img src="${i}GraphBench_text.svg" alt="GraphBench" />
       </a>
       <nav class="nav-links" aria-label="Sections">
-        ${l.map(r=>r.external?r.label==="GitHub"?`<a href="${r.href}" target="_blank" rel="noopener noreferrer"><img src="/github.svg" class="icon" alt="" aria-hidden="true"/> <span>${r.label}</span></a>`:`<a href="${r.href}" target="_blank" rel="noopener noreferrer">${r.label}</a>`:`<a href="${r.href}" ${r.key===t?'aria-current="page"':""}>${r.label}</a>`).join("")}
+        ${l.map(r=>r.external?r.label==="GitHub"?`<a href="${r.href}" target="_blank" rel="noopener noreferrer"><img src="${i}github.svg" class="icon" alt="" aria-hidden="true"/> <span>${r.label}</span></a>`:`<a href="${r.href}" target="_blank" rel="noopener noreferrer">${r.label}</a>`:`<a href="${r.href}" ${r.key===t?'aria-current="page"':""}>${r.label}</a>`).join("")}
       </nav>
     </div>
   </header>

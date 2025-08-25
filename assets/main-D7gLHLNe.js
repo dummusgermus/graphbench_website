@@ -1,4 +1,4 @@
-import{r as g}from"./layout-C3fnnbLW.js";const m=document.querySelector("#app");m.innerHTML=g("home",`
+import{r as g}from"./layout-SwDyHynY.js";const m=document.querySelector("#app");m.innerHTML=g("home",`
   <!-- Slide 1: Hero -->
   <section class="snap-section hero hero-primary">
     <div class="container">
