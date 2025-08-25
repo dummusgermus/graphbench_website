@@ -1,12 +1,12 @@
-import{r as g}from"./layout-SwDyHynY.js";const m=document.querySelector("#app");m.innerHTML=g("home",`
+import{r as m,g as e}from"./layout-Crauikd6.js";const b=document.querySelector("#app");b.innerHTML=m("home",`
   <!-- Slide 1: Hero -->
   <section class="snap-section hero hero-primary">
     <div class="container">
       <h1>Modern Benchmarking for Graph Learning</h1>
       <p>GraphBench provides standardized datasets, clear protocols, and reproducible baselines for evaluating graph machine learning across tasks and scales.</p>
       <div class="cta">
-        <a href="./pages/quickstart.html" class="btn btn-primary">Get Started</a>
-        <a href="./pages/datasets.html" class="btn btn-outline">Explore Datasets</a>
+        <a href="${e()}pages/quickstart.html" class="btn btn-primary">Get Started</a>
+        <a href="${e()}pages/datasets.html" class="btn btn-outline">Explore Datasets</a>
       </div>
       <button id="down-arrow" aria-label="Scroll to datasets" class="arrow-btn arrow-down" title="Scroll">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -27,7 +27,7 @@ import{r as g}from"./layout-SwDyHynY.js";const m=document.querySelector("#app");
         <article class="card col-4"><h3>Reddit</h3><p class="muted">Node Classification</p></article>
       </div>
       <div style="margin-top:1rem">
-        <a class="btn btn-outline" href="./pages/datasets.html">View all datasets</a>
+        <a class="btn btn-outline" href="${e()}pages/datasets.html">View all datasets</a>
       </div>
       <button aria-label="Scroll up" class="arrow-btn arrow-up" data-direction="up" title="Scroll up">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -53,7 +53,7 @@ bench = Benchmark(dataset="ogbn-arxiv", model="gcn")
 bench.run()</code></pre>
         <div style="display:flex; gap:.5rem; margin-top:.5rem;">
           <button class="btn btn-primary" id="copy-code" data-copy="from graphbench import Benchmark\\n\\nbench = Benchmark(dataset=\\"ogbn-arxiv\\", model=\\"gcn\\")\\nbench.run()">Copy code</button>
-          <a class="btn btn-outline" href="./pages/quickstart.html">Quick Start</a>
+          <a class="btn btn-outline" href="${e()}pages/quickstart.html">Quick Start</a>
         </div>
       </div>
       <button aria-label="Scroll up" class="arrow-btn arrow-up" data-direction="up" title="Scroll up">
@@ -63,4 +63,4 @@ bench.run()</code></pre>
       </button>
     </div>
   </section>
-`,"snap-container");document.body.classList.add("no-body-scroll");const s=t=>{const l=t.getAttribute("data-direction")||"down",e=Array.from(document.querySelectorAll(".snap-section")),c=window.scrollY,d=document.getElementById("main").getBoundingClientRect().top+window.scrollY,a=e.reduce((r,h,u)=>{const w=h.getBoundingClientRect().top+window.scrollY,i=Math.abs(w-d-c);return i<r.dist?{idx:u,dist:i}:r},{idx:0,dist:Number.POSITIVE_INFINITY}).idx,p=l==="up"?Math.max(0,a-1):Math.min(e.length-1,a+1);e[p].scrollIntoView({behavior:"smooth"})},o=document.getElementById("down-arrow");o&&o.addEventListener("click",()=>s(o));document.querySelectorAll(".arrow-btn[data-direction]").forEach(t=>{t.addEventListener("click",()=>s(t))});const n=document.getElementById("copy-code");n&&n.addEventListener("click",async()=>{const t=n.getAttribute("data-copy")||"";try{await navigator.clipboard.writeText(t)}catch{}});
+`,"snap-container");document.body.classList.add("no-body-scroll");const l=t=>{const c=t.getAttribute("data-direction")||"down",o=Array.from(document.querySelectorAll(".snap-section")),d=window.scrollY,p=document.getElementById("main").getBoundingClientRect().top+window.scrollY,r=o.reduce((i,u,w)=>{const g=u.getBoundingClientRect().top+window.scrollY,s=Math.abs(g-p-d);return s<i.dist?{idx:w,dist:s}:i},{idx:0,dist:Number.POSITIVE_INFINITY}).idx,h=c==="up"?Math.max(0,r-1):Math.min(o.length-1,r+1);o[h].scrollIntoView({behavior:"smooth"})},n=document.getElementById("down-arrow");n&&n.addEventListener("click",()=>l(n));document.querySelectorAll(".arrow-btn[data-direction]").forEach(t=>{t.addEventListener("click",()=>l(t))});const a=document.getElementById("copy-code");a&&a.addEventListener("click",async()=>{const t=a.getAttribute("data-copy")||"";try{await navigator.clipboard.writeText(t)}catch{}});
