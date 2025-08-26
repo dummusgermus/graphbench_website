@@ -10,8 +10,8 @@ app.innerHTML = renderLayout('home', `
       <h1>Modern Benchmarking for Graph Learning</h1>
       <p>GraphBench provides standardized datasets, clear protocols, and reproducible baselines for evaluating graph machine learning across tasks and scales.</p>
       <div class="cta">
-        <a href="/pages/quickstart.html" class="btn btn-primary">Get Started</a>
-        <a href="/pages/datasets.html" class="btn btn-outline">Explore Datasets</a>
+        <a href="./quickstart.html" class="btn btn-primary">Get Started</a>
+        <a href="./datasets.html" class="btn btn-outline">Explore Datasets</a>
       </div>
       <button id="down-arrow" aria-label="Scroll to datasets" class="arrow-btn arrow-down" title="Scroll">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -32,7 +32,7 @@ app.innerHTML = renderLayout('home', `
         <article class="card col-4"><h3>Reddit</h3><p class="muted">Node Classification</p></article>
       </div>
       <div style="margin-top:1rem">
-        <a class="btn btn-outline" href="/pages/datasets.html">View all datasets</a>
+        <a class="btn btn-outline" href="./datasets.html">View all datasets</a>
       </div>
       <button aria-label="Scroll up" class="arrow-btn arrow-up" data-direction="up" title="Scroll up">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -55,7 +55,7 @@ app.innerHTML = renderLayout('home', `
         <pre><code id="code-snippet">from graphbench import Benchmark\n\nbench = Benchmark(dataset=\"ogbn-arxiv\", model=\"gcn\")\nbench.run()</code></pre>
         <div style="display:flex; gap:.5rem; margin-top:.5rem;">
           <button class="btn btn-primary" id="copy-code" data-copy="from graphbench import Benchmark\\n\\nbench = Benchmark(dataset=\\\"ogbn-arxiv\\\", model=\\\"gcn\\\")\\nbench.run()">Copy code</button>
-          <a class="btn btn-outline" href="/pages/quickstart.html">Quick Start</a>
+          <a class="btn btn-outline" href="./quickstart.html">Quick Start</a>
         </div>
       </div>
       <button aria-label="Scroll up" class="arrow-btn arrow-up" data-direction="up" title="Scroll up">

@@ -1,6 +1,7 @@
 import '../style.css'
 import { initWeatherGlobe } from '../features/weather/globe'
 import { renderLayout } from '../shared/layout'
+import { initArGraphVisualizer } from '../features/ar/visualizer'
 
 type Ds = { id: string; name: string; group: number; regimes: string[] }
 const items: Ds[] = [
@@ -100,7 +101,7 @@ const dsSlide = (r: Ds, idx: number, total: number): string => {
        <p>Explain, at a high level, how graphs are constructed, why the chosen regimes apply here, and what makes this dataset challenging such as scale, sparsity, or long-range dependencies.</p>`
 
   return `
-  <section class="snap-section ds-slide section-white ds-accent ${accentClass}" id="ds-${r.id}" style="background:#fff;">
+  <section class="snap-section ds-slide section-white ds-accent ${accentClass}${r.id === 'ar' ? ' ds-ar-stretch' : ''}" id="ds-${r.id}" style="background:#fff;">
     <div class="container">
       <div class="grid">
         <div class="col-6" style="margin-left:1rem;">
@@ -127,7 +128,7 @@ const dsSlide = (r: Ds, idx: number, total: number): string => {
             </div>
           </div>
         </div>
-        <div class="col-6 ${r.id === 'weather' ? 'wf-right' : ''}" id="ds-side-${r.id}"></div>
+        <div class="col-6 ${r.id === 'weather' ? 'wf-right' : (r.id === 'ar' ? 'ar-right' : '')}" id="ds-side-${r.id}"></div>
       </div>
       ${upBtn}
       <div class="arrow-caption arrow-caption-up">${prevName}</div>
@@ -243,6 +244,13 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
   if (!mount) return
   try { initWeatherGlobe({ mountEl: mount, skin: 'blue' }) } catch {}
 })()
+
+  // Initialize algorithmic reasoning graph generator on its slide
+  ; (function () {
+    const mount = document.getElementById('ds-side-ar') as HTMLElement | null
+    if (!mount) return
+    try { initArGraphVisualizer({ mountEl: mount }) } catch { }
+  })()
 
 // Progressive enhancement: rich hover window for variable list
 ;(function () {

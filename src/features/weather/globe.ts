@@ -35,8 +35,9 @@ export function initWeatherGlobe(options: WeatherGlobeOptions) {
   const CLOUDS_ALT = 0.1
   const CLOUDS_ROTATION_SPEED = -0.011 // deg/frame, slightly slower for subtle drift
   const CLOUDS_OPACITY = 0.9
+  const base = (import.meta as any).env?.BASE_URL ?? '/'
   const cloudTextureUrls = [
-    '/clouds.png',
+    `${base}clouds.png`,
     '//unpkg.com/three-globe/example/img/clouds.png',
     '//cdn.jsdelivr.net/npm/three-globe/example/img/clouds.png',
     'https://raw.githubusercontent.com/turban/webgl-earth/master/assets/images/earthcloudmaptrans.png'

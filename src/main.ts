@@ -3,17 +3,17 @@ import './style.css'
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header>
     <div class="container nav">
-      <a class="brand" href="/"> 
-        <img src="/GraphBench.svg" alt="GraphBench logo" />
+      <a class="brand" href="./">
+        <img src="./GraphBench.svg" alt="GraphBench logo" />
         <strong>GraphBench</strong>
         <span class="chip" aria-hidden="true"><span class="dot"></span>prototype</span>
       </a>
       <nav class="nav-links">
-        <a href="/pages/quickstart.html">Get Started</a>
-        <a href="/pages/datasets.html">Datasets</a>
-        <a href="/pages/leaderboard.html">Leaderboard</a>
-        <a href="/pages/links.html">Links</a>
-        <a href="/pages/updates.html">Updates</a>
+        <a href="./quickstart.html">Get Started</a>
+        <a href="./datasets.html">Datasets</a>
+        <a href="./leaderboard.html">Leaderboard</a>
+        <a href="./links.html">Links</a>
+        <a href="./updates.html">Updates</a>
       </nav>
     </div>
   </header>
