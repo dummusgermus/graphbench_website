@@ -1,4 +1,4 @@
-export type PageKey = 'home' | 'quickstart' | 'datasets' | 'leaderboard' | 'updates'
+export type PageKey = 'home' | 'quickstart' | 'datasets' | 'evaluation' | 'team' | 'updates'
 
 type NavLink = { key?: PageKey; label: string; href: string; external?: boolean }
 
@@ -22,8 +22,9 @@ export function getRuntimeBase(): string {
 export const NAV_LINKS: NavLink[] = [
   { key: 'quickstart', label: 'Get Started', href: `./quickstart.html` },
   { key: 'datasets', label: 'Datasets', href: `./datasets.html` },
-  { key: 'leaderboard', label: 'Leaderboard', href: `./leaderboard.html` },
+  { key: 'evaluation', label: 'Evaluation', href: `./evaluation.html` },
   { key: 'updates', label: 'Updates', href: `./updates.html` },
+  { key: 'team', label: 'Team', href: `./team.html` },
   { label: 'Paper', href: 'https://arxiv.org/', external: true },
   { label: 'GitHub', href: 'https://github.com/chrsmrrs/graphbench', external: true },
 ]

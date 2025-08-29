@@ -57,15 +57,19 @@ const dsUnifiedRows = (rows: Ds[], group: number, label: string) => {
       const cls = x === 'Generation' ? 'tag-gen' : (x === 'Node-level') ? 'tag-node' : ((x === 'Edge-level' || x === 'edge-level') ? 'tag-edge' : 'tag-graph')
       return `<span class=\"chip-sm ${cls}\">${x}</span>`
     }).join(' ')
+    const graphs = r.id === 'weather' ? '93.544' : '90k'
+    const nodes = r.id === 'weather' ? '4.610' : '16–256'
+    const edges = r.id === 'weather' ? '7.928' : '16–2556'
+    const size = r.id === 'weather' ? '60.6GB' : '1.2GB'
     return `
     <tr class=\"${rowCls}\"> 
       <td class="accent-cell"></td>
       <td class="ds-name"><span class="icon">${dsIcon(r.id)}</span>${r.name}</td>
-      <td>90k</td>
-      <td>16–256</td>
-      <td>16–2556</td>
+      <td>${graphs}</td>
+      <td>${nodes}</td>
+      <td>${edges}</td>
       <td>${tags}</td>
-      <td>1.2GB</td>
+      <td>${size}</td>
       <td style=\"text-align:right; white-space: nowrap;\"><a class=\"btn btn-primary\" href=\"#\" data-dsid=\"${r.id}\">Learn more</a></td>
     </tr>`
   }).join('')
@@ -100,6 +104,11 @@ const dsSlide = (r: Ds, idx: number, total: number): string => {
     : `<p>Placeholder overview text about ${r.name}. Describe the domain, data sources, typical prediction targets, and important structural properties of the graphs. Mention how nodes and edges are defined and how the connectivity captures meaningful relationships.</p>
        <p>Explain, at a high level, how graphs are constructed, why the chosen regimes apply here, and what makes this dataset challenging such as scale, sparsity, or long-range dependencies.</p>`
 
+  const graphsVal = r.id === 'weather' ? '93.544' : '90k'
+  const nodesVal = r.id === 'weather' ? '4.610' : '16–256'
+  const edgesVal = r.id === 'weather' ? '7.928' : '16–2556'
+  const sizeVal = r.id === 'weather' ? '60.6GB' : '1.2GB'
+
   return `
   <section class="snap-section ds-slide section-white ds-accent ${accentClass}${r.id === 'ar' ? ' ds-ar-stretch' : ''}" id="ds-${r.id}" style="background:#fff;">
     <div class="container">
@@ -115,16 +124,16 @@ const dsSlide = (r: Ds, idx: number, total: number): string => {
           <div class="prose" style="margin-top:1rem;">${proseHtml}</div>
           <div class="grid" style="margin-top:.8rem; row-gap:.6rem;">
             <div class="col-6">
-              <div class="stat-big stat-plain"><div class="value">90k</div><div class="label">Graphs</div></div>
+              <div class="stat-big stat-plain"><div class="value">${graphsVal}</div><div class="label">Graphs</div></div>
             </div>
             <div class="col-6">
-              <div class="stat-big stat-plain"><div class="value">16–256</div><div class="label">Nodes</div></div>
+              <div class="stat-big stat-plain"><div class="value">${nodesVal}</div><div class="label">Nodes</div></div>
             </div>
             <div class="col-6">
-              <div class="stat-big stat-plain"><div class="value">16–2556</div><div class="label">Edges</div></div>
+              <div class="stat-big stat-plain"><div class="value">${edgesVal}</div><div class="label">Edges</div></div>
             </div>
             <div class="col-6">
-              <div class="stat-big stat-plain"><div class="value">1.2GB</div><div class="label">Size</div></div>
+              <div class="stat-big stat-plain"><div class="value">${sizeVal}</div><div class="label">Size</div></div>
             </div>
           </div>
         </div>

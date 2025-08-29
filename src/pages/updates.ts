@@ -1,5 +1,5 @@
 import '../style.css'
-import { renderLayout } from '../shared/layout'
+import { renderLayout, getRuntimeBase } from '../shared/layout'
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 app.innerHTML = renderLayout('updates', `
@@ -14,17 +14,33 @@ app.innerHTML = renderLayout('updates', `
     </div>
   </section>
   <section class="container">
-    <div class="grid">
-      <div class="card col-12">
-        <h3>2025-01-10</h3>
-        <p class="muted">Prototype UI released with datasets gallery and sample leaderboard.</p>
-      </div>
-      <div class="card col-12">
-        <h3>2024-12-12</h3>
-        <p class="muted">Initial project scaffolding and design tokens.</p>
-      </div>
-    </div>
+    <div class="updates" id="updates-list"></div>
   </section>
 `)
+
+type UpdateItem = { date: string; version: string; text: string }
+  ; (async () => {
+    const mount = document.getElementById('updates-list') as HTMLDivElement | null
+    if (!mount) return
+    try {
+      const base = getRuntimeBase()
+      const res = await fetch(`${base}updates.json`)
+      if (!res.ok) throw new Error('Failed to load updates')
+      const items = (await res.json()) as UpdateItem[]
+      items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      const html = items.map(u => {
+        const major = String(u.version || '').split('.')[0] || '1'
+        const vClass = `v${major}`
+        return `
+      <div class="update">
+        <div class="update-head">
+          <h3 class="update-title"><span class="date">${u.date}</span><span class="version-tag ${vClass}" aria-label="Version">${u.version}</span></h3>
+        </div>
+        <div class="update-body">${u.text}</div>
+      </div>`
+      }).join('')
+      mount.innerHTML = html
+    } catch { }
+  })()
 
 

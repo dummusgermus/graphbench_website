@@ -227,14 +227,19 @@ function genPLC(n: number, m: number, p: number): Graph {
   for (let v = init; v < n; v++) {
     const targets: number[] = []
     for (let u = 0; u < v; u++) for (let t = 0; t < degree[u]; t++) targets.push(u)
+    const targetEdges = Math.min(Math.max(1, Math.floor(m)), v)
     let added = 0
-    while (added < Math.max(1, Math.floor(m))) {
+    let safety = 0
+    while (added < targetEdges && safety++ < 10000) {
       const u = targets.length ? choice(targets) : randInt(v)
       if (addEdge(v, u)) {
         added++
+        if (added >= targetEdges) break
         if (Math.random() < p && neighbors[u].length > 0) {
           const w = choice(neighbors[u])
-          addEdge(v, w)
+          if (addEdge(v, w)) {
+            added++
+          }
         }
       }
     }
@@ -271,31 +276,86 @@ function genSBM(n: number, blocks: number, pIn: number, pOut: number): Graph {
   return { numNodes: n, edges }
 }
 
+// Ensure the generated undirected graph is a single connected component
+function ensureConnected(g: Graph): Graph {
+  const n = g.numNodes
+  if (n <= 1) return g
+  const edges: Edge[] = g.edges.slice()
+  const adj: number[][] = Array.from({ length: n }, () => [])
+  const edgeKey = (a: number, b: number) => `${Math.min(a, b)}-${Math.max(a, b)}`
+  const existing = new Set<string>()
+  for (const [a, b] of edges) {
+    adj[a].push(b)
+    adj[b].push(a)
+    existing.add(edgeKey(a, b))
+  }
+  const visited = new Array<boolean>(n).fill(false)
+  const components: number[][] = []
+  for (let i = 0; i < n; i++) {
+    if (visited[i]) continue
+    const stack = [i]
+    visited[i] = true
+    const comp: number[] = []
+    while (stack.length) {
+      const v = stack.pop() as number
+      comp.push(v)
+      for (const u of adj[v]) {
+        if (!visited[u]) { visited[u] = true; stack.push(u) }
+      }
+    }
+    components.push(comp)
+  }
+  if (components.length <= 1) return g
+  components.sort((a, b) => b.length - a.length)
+  const main = components[0]
+  const pick = (arr: number[]) => arr[randInt(arr.length)]
+  for (let k = 1; k < components.length; k++) {
+    const u = pick(components[k])
+    const v = pick(main)
+    const key = edgeKey(u, v)
+    if (!existing.has(key)) {
+      existing.add(key)
+      edges.push([u, v])
+      adj[u].push(v)
+      adj[v].push(u)
+    }
+  }
+  return { numNodes: n, edges }
+}
+
 // 3D rendering handled by ForceGraph3D (internally uses d3-force-3d)
 
 function generateGraph(dist: DistributionId, problem: ProblemId, n: number): Graph {
   const params = PARAMS[problem][dist] || {}
+  let g: Graph
   switch (dist) {
     case 'er':
-      return genER(n, clamp01(params.p ?? 0.1))
+      g = genER(n, clamp01(params.p ?? 0.1))
+      break
     case 'nws': {
       const k = Math.max(0, Math.floor(params.k ?? 4))
       const p = clamp01(params.p ?? 0.1)
-      return genNWS(n, k, p)
+      g = genNWS(n, k, p)
+      break
     }
     case 'ba':
-      return genBA(n, Math.max(1, Math.floor(params.m ?? 2)))
+      g = genBA(n, Math.max(1, Math.floor(params.m ?? 2)))
+      break
     case 'dba':
-      return genDBA(n, Math.max(1, Math.floor(params.m1 ?? 1)), Math.max(1, Math.floor(params.m2 ?? 3)), clamp01(params.p ?? 0.5))
+      g = genDBA(n, Math.max(1, Math.floor(params.m1 ?? 1)), Math.max(1, Math.floor(params.m2 ?? 3)), clamp01(params.p ?? 0.5))
+      break
     case 'plc':
-      return genPLC(n, Math.max(1, Math.floor(params.m ?? 2)), clamp01(params.p ?? 0.1))
+      g = genPLC(n, Math.max(1, Math.floor(params.m ?? 2)), clamp01(params.p ?? 0.1))
+      break
     case 'sbm': {
       const blocks = Math.max(2, Math.floor(params.blocks ?? 4))
       const pIn = clamp01(params.pIn ?? 0.2)
       const pOut = clamp01(params.pOut ?? 0.02)
-      return genSBM(n, blocks, pIn, pOut)
+      g = genSBM(n, blocks, pIn, pOut)
+      break
     }
   }
+  return ensureConnected(g)
 }
 
 function clamp01(x: number) { return Math.max(0, Math.min(1, x)) }
@@ -447,60 +507,60 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
   // Optional per-combination zoom overrides (edit by eye as needed)
   const ZOOMS: Record<ProblemId, Partial<Record<DistributionId, { train: number; test: number }>>> = {
     max_clique: {
-      er: { train: TRAIN_DIST, test: TEST_DIST },
-      nws: { train: TRAIN_DIST, test: TEST_DIST },
-      ba: { train: TRAIN_DIST, test: TEST_DIST },
-      dba: { train: TRAIN_DIST, test: TEST_DIST },
-      plc: { train: TRAIN_DIST, test: TEST_DIST },
-      sbm: { train: TRAIN_DIST, test: TEST_DIST },
+      er: { train: 150, test: 400 },
+      nws: { train: 150, test: 400 },
+      ba: { train: 150, test: 450 },
+      dba: { train: 170, test: TEST_DIST },
+      plc: { train: 150, test: 450 },
+      sbm: { train: 150, test: 400 },
     },
     shortest_path: {
-      er: { train: TRAIN_DIST, test: 360 },
-      nws: { train: TRAIN_DIST, test: 360 },
+      er: { train: 270, test: 360 },
+      nws: { train: 230, test: 360 },
       ba: { train: 220, test: TEST_DIST },
       dba: { train: TRAIN_DIST, test: 1000 },
-      plc: { train: TRAIN_DIST, test: 1000 },
-      sbm: { train: TRAIN_DIST, test: 600 },
+      plc: { train: 240, test: 1000 },
+      sbm: { train: 260, test: 600 },
     },
     max_spanning_tree: {
-      er: { train: TRAIN_DIST, test: TEST_DIST },
-      nws: { train: TRAIN_DIST, test: TEST_DIST },
-      ba: { train: TRAIN_DIST, test: TEST_DIST },
-      dba: { train: TRAIN_DIST, test: TEST_DIST },
-      plc: { train: TRAIN_DIST, test: TEST_DIST },
-      sbm: { train: TRAIN_DIST, test: TEST_DIST },
+      er: { train: 230, test: 400 },
+      nws: { train: 190, test: 400 },
+      ba: { train: 190, test: TEST_DIST },
+      dba: { train: 190, test: TEST_DIST },
+      plc: { train: 190, test: TEST_DIST },
+      sbm: { train: 190, test: 400 },
     },
     steiner_tree: {
-      er: { train: TRAIN_DIST, test: TEST_DIST },
-      nws: { train: TRAIN_DIST, test: TEST_DIST },
-      ba: { train: TRAIN_DIST, test: TEST_DIST },
-      dba: { train: TRAIN_DIST, test: TEST_DIST },
-      plc: { train: TRAIN_DIST, test: TEST_DIST },
-      sbm: { train: TRAIN_DIST, test: TEST_DIST },
+      er: { train: 290, test: 400 },
+      nws: { train: 220, test: 400 },
+      ba: { train: 220, test: TEST_DIST },
+      dba: { train: 250, test: 700 },
+      plc: { train: 200, test: TEST_DIST },
+      sbm: { train: 200, test: 400 },
     },
     max_flow: {
-      er: { train: TRAIN_DIST, test: TEST_DIST },
-      nws: { train: TRAIN_DIST, test: TEST_DIST },
-      ba: { train: TRAIN_DIST, test: TEST_DIST },
-      dba: { train: TRAIN_DIST, test: TEST_DIST },
-      plc: { train: TRAIN_DIST, test: TEST_DIST },
-      sbm: { train: TRAIN_DIST, test: TEST_DIST },
+      er: { train: 280, test: 400 },
+      nws: { train: 210, test: 400 },
+      ba: { train: 210, test: TEST_DIST },
+      dba: { train: 210, test: TEST_DIST },
+      plc: { train: 210, test: TEST_DIST },
+      sbm: { train: 210, test: 400 },
     },
     bipartite_matching: {
-      er: { train: TRAIN_DIST, test: TEST_DIST },
-      nws: { train: TRAIN_DIST, test: TEST_DIST },
-      ba: { train: TRAIN_DIST, test: TEST_DIST },
-      dba: { train: TRAIN_DIST, test: TEST_DIST },
-      plc: { train: TRAIN_DIST, test: TEST_DIST },
-      sbm: { train: TRAIN_DIST, test: TEST_DIST },
+      er: { train: 260, test: 450 },
+      nws: { train: 210, test: 450 },
+      ba: { train: 220, test: TEST_DIST },
+      dba: { train: 220, test: TEST_DIST },
+      plc: { train: 180, test: 450 },
+      sbm: { train: TRAIN_DIST, test: 400 },
     },
     bridge_finding: {
-      er: { train: TRAIN_DIST, test: TEST_DIST },
+      er: { train: 270, test: 450 },
       nws: { train: TRAIN_DIST, test: TEST_DIST },
-      ba: { train: TRAIN_DIST, test: TEST_DIST },
-      dba: { train: TRAIN_DIST, test: TEST_DIST },
-      plc: { train: TRAIN_DIST, test: TEST_DIST },
-      sbm: { train: TRAIN_DIST, test: TEST_DIST },
+      ba: { train: 260, test: 1000 },
+      dba: { train: 270, test: 1000 },
+      plc: { train: 280, test: 1000 },
+      sbm: { train: 270, test: 550 },
     },
   }
   const getZoomFor = (d: DistributionId, p: ProblemId, s: SizeId): number => {

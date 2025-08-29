@@ -1,0 +1,20 @@
+import '../style.css'
+import { renderLayout } from '../shared/layout'
+
+const app = document.querySelector<HTMLDivElement>('#app')!
+app.innerHTML = renderLayout('evaluation', `
+  <section class="page-header">
+    <div class="container">
+      <div class="title-row">
+        <span class="page-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M10 8l4 4-4 4"/></svg>
+        </span>
+        <h2>Evaluation</h2>
+      </div>
+      <p class="lead">Should we have an evaluation section? What could be on it?</p>
+    </div>
+  </section>
+`)
+
+
+
