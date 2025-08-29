@@ -1,0 +1,8 @@
+[
+  { "date": "2027-10-11", "version": "3.0.0", "text": "Turing award winning update. To the stars and beyond ⭐" },
+  { "date": "2026-08-12", "version": "2.0.0", "text": "Major overhaul, big changes." },
+  { "date": "2026-01-24", "version": "1.2.0", "text": "Dataset and evaluator extensions." },
+  { "date": "2025-10-08", "version": "1.0.1", "text": "Some minor refinements." },
+  { "date": "2025-09-24", "version": "1.0.0", "text": "Initial GraphBench release." }
+]
+
