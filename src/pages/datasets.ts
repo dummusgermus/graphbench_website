@@ -159,7 +159,7 @@ const slidesHtml = `
           </span>
           <h2>Datasets</h2>
         </div>
-        <p class="lead">Summaries of each dataset. Click to learn more later.</p>
+        <p class="lead">Get an overview over GraphBench's datasets. Or scroll down to learn more about each one.</p>
       </div>
       <div class="ds-section ds-y-nudge" style="--ds-y:-8px;">
         <table class="ds-table" aria-label="Datasets table">
