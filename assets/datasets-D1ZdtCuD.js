@@ -1,4 +1,4 @@
-import{r as YI}from"./layout-BG0eTqOu.js";/**
+import{r as YI}from"./layout-yOHGpJMP.js";/**
  * @license
  * Copyright 2010-2025 Three.js Authors
  * SPDX-License-Identifier: MIT
@@ -5398,7 +5398,7 @@ Vertical wind speed (W)" tabindex="0" role="button" aria-label="Show variables" 
           </span>
           <h2>Datasets</h2>
         </div>
-        <p class="lead">Summaries of each dataset. Click to learn more later.</p>
+        <p class="lead">Get an overview over GraphBench's datasets. Or scroll down to learn more about each one.</p>
       </div>
       <div class="ds-section ds-y-nudge" style="--ds-y:-8px;">
         <table class="ds-table" aria-label="Datasets table">
