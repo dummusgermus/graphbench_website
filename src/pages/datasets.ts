@@ -209,24 +209,47 @@ app.innerHTML = renderLayout('datasets', slidesHtml, 'snap-container')
 document.body.classList.add('no-body-scroll')
 document.documentElement.classList.add('no-root-scroll')
 
-// Arrow scroll to next/prev slide (same as home page)
+// Arrow scroll to next/prev slide (use snap container scroll position)
 const handleArrow = (btn: HTMLButtonElement) => {
   const direction = btn.getAttribute('data-direction') || 'down'
+  const container = document.getElementById('main') as HTMLElement
   const slides = Array.from(document.querySelectorAll('.snap-section')) as HTMLElement[]
-  const viewportTop = window.scrollY
-  const containerTop = (document.getElementById('main') as HTMLElement).getBoundingClientRect().top + window.scrollY
+  const viewportTop = container.scrollTop
   const currentIndex = slides.reduce((best, el, idx) => {
-    const y = el.getBoundingClientRect().top + window.scrollY
-    const dist = Math.abs((y - containerTop) - viewportTop)
+    const y = el.offsetTop
+    const dist = Math.abs(y - viewportTop)
     return dist < best.dist ? { idx, dist } : best
   }, { idx: 0, dist: Number.POSITIVE_INFINITY }).idx
   const nextIndex = direction === 'up' ? Math.max(0, currentIndex - 1) : Math.min(slides.length - 1, currentIndex + 1)
-  slides[nextIndex].scrollIntoView({ behavior: 'smooth' })
+  slides[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEach(btn => {
   btn.addEventListener('click', () => handleArrow(btn))
 })
+
+  // Wheel-to-snap: translate wheel deltas into slide navigation on the snap container
+  ; (function () {
+    const container = document.getElementById('main') as HTMLElement | null
+    if (!container) return
+    let isLocked = false
+    const navigate = (dir: 'up' | 'down') => {
+      const fakeBtn = document.createElement('button')
+      fakeBtn.setAttribute('data-direction', dir)
+      handleArrow(fakeBtn as HTMLButtonElement)
+    }
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault()
+      if (isLocked) return
+      const dir = (e.deltaY || 0) > 0 ? 'down' : 'up'
+      isLocked = true
+      navigate(dir)
+      setTimeout(() => { isLocked = false }, 650)
+    }
+    container.addEventListener('wheel', onWheel, { passive: false })
+    const header = document.getElementById('site-header') as HTMLElement | null
+    if (header) header.addEventListener('wheel', onWheel, { passive: false })
+  })()
 
 // Learn more buttons in the table jump to the matching dataset slide
 ;(function () {

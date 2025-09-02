@@ -19,6 +19,7 @@ app.innerHTML = renderLayout('home', `
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
       </button>
+      <div class="arrow-caption arrow-caption-down">What's in it?</div>
     </div>
   </section>
 
@@ -99,49 +100,31 @@ app.innerHTML = renderLayout('home', `
           <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
       </button>
+      <div class="arrow-caption arrow-caption-up">Home</div>
       <button aria-label="Scroll down" class="arrow-btn arrow-down" data-direction="down" title="Scroll down">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
       </button>
+      <div class="arrow-caption arrow-caption-down">Quickstart</div>
     </div>
   </section>
 
   <!-- Slide 3: GUI + Generated code -->
-  <section class="snap-section section-white" style="background:#fff;">
+  <section class="snap-section section-white builder-section" style="background:#fff;">
     <div class="container">
-      <p class="builder-intro">Choose your datasets and model configuration.<br/>Copy the code. And you're ready to go.</p>
+      <p class="builder-intro">Configure on the left. Code updates live on the right.</p>
       <div class="builder-grid">
-        <div class="builder-left-row">
-          <div>
-            <h3 style="margin:.2rem 0 .6rem;">Datasets</h3>
-            <div id="ds-builder"></div>
-            <div id="ds-subsets" style="margin-top:.6rem; display:none;">
-              <div class="ds-table-wrap">
-                <div class="ds-label2">Algorithmic Reasoning subsets</div>
-                <div class="grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); gap:.5rem;">
-                  <label class="chip-sm" style="cursor:pointer; display:flex; align-items:center; gap:.4rem;"><input type="checkbox" data-subset="easy" checked /> easy</label>
-                  <label class="chip-sm" style="cursor:pointer; display:flex; align-items:center; gap:.4rem;"><input type="checkbox" data-subset="medium" checked /> medium</label>
-                  <label class="chip-sm" style="cursor:pointer; display:flex; align-items:center; gap:.4rem;"><input type="checkbox" data-subset="hard" checked /> hard</label>
-                </div>
-              </div>
-            </div>
+        <aside class="builder-sidebar" aria-label="Configuration">
+          <div class="side">
+            <div class="side-head"><h3>Set up your custom GraphCast code.</h3></div>
+            <div class="side-body" id="config-panel"></div>
           </div>
-          <div>
-            <h3 style="margin:.2rem 0 .6rem;">Your Model</h3>
-            <div class="model-list">
-              <label class="toggle-row"><span class="name">pre_filter</span><input type="checkbox" id="opt-pre-filter" class="ds-check" /><span class="toggle" aria-hidden="true"></span></label>
-              <label class="toggle-row"><span class="name">pre_transform</span><input type="checkbox" id="opt-pre-transform" class="ds-check" /><span class="toggle" aria-hidden="true"></span></label>
-              <label class="toggle-row"><span class="name">transform</span><input type="checkbox" id="opt-transform" class="ds-check" /><span class="toggle" aria-hidden="true"></span></label>
-            </div>
-          </div>
-        </div>
+        </aside>
+
         <aside class="builder-right">
-          <div class="builder-box card code-card">
+          <div class="builder-canvas code-card">
             <div class="code-wrap builder-code">
-              <button class="copy-btn" id="copy-gen" data-copy="" aria-label="Copy" title="Copy">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              </button>
               <pre><code id="gen-code" class="code-manual"></code></pre>
             </div>
             <div class="builder-help">Copy and paste the code and you’re ready to go.</div>
@@ -154,27 +137,28 @@ app.innerHTML = renderLayout('home', `
           <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
       </button>
+      <div class="arrow-caption arrow-caption-up arrow-caption-left">What's in it?</div>
     </div>
   </section>
 `, 'snap-container')
 
 // Avoid double scrollbars when snap container is active
 document.body.classList.add('no-body-scroll')
+document.documentElement.classList.add('no-root-scroll')
 
-// Arrow scroll to next/prev slide
+// Arrow scroll to next/prev slide (use snap container scroll position)
 const handleArrow = (btn: HTMLButtonElement) => {
   const direction = btn.getAttribute('data-direction') || 'down'
+  const container = document.getElementById('main') as HTMLElement
   const slides = Array.from(document.querySelectorAll('.snap-section')) as HTMLElement[]
-  const viewportTop = window.scrollY
-  // find current slide index by proximity
-  const containerTop = (document.getElementById('main') as HTMLElement).getBoundingClientRect().top + window.scrollY
+  const viewportTop = container.scrollTop
   const currentIndex = slides.reduce((best, el, idx) => {
-    const y = el.getBoundingClientRect().top + window.scrollY
-    const dist = Math.abs((y - containerTop) - viewportTop)
+    const y = el.offsetTop
+    const dist = Math.abs(y - viewportTop)
     return dist < best.dist ? { idx, dist } : best
   }, { idx: 0, dist: Number.POSITIVE_INFINITY }).idx
   const nextIndex = direction === 'up' ? Math.max(0, currentIndex - 1) : Math.min(slides.length - 1, currentIndex + 1)
-  slides[nextIndex].scrollIntoView({ behavior: 'smooth' })
+  slides[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 const primaryDown = document.getElementById('down-arrow') as HTMLButtonElement | null
@@ -185,6 +169,66 @@ if (primaryDown) {
 document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEach(btn => {
   btn.addEventListener('click', () => handleArrow(btn))
 })
+
+  // Wheel-to-snap: translate wheel deltas into slide navigation on the snap container
+  ; (function () {
+    const container = document.getElementById('main') as HTMLElement | null
+    if (!container) return
+    let isLocked = false
+    const isScrollableAncestor = (start: HTMLElement | null, deltaX: number, deltaY: number): boolean => {
+      let node: HTMLElement | null = start
+      while (node && node !== container) {
+        const style = window.getComputedStyle(node)
+        const overflowY = style.overflowY
+        const overflowX = style.overflowX
+        const canScrollY = node.scrollHeight > node.clientHeight && (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay')
+        const canScrollX = node.scrollWidth > node.clientWidth && (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay')
+        if (canScrollY && deltaY !== 0) {
+          const canDown = deltaY > 0 && node.scrollTop + node.clientHeight < node.scrollHeight
+          const canUp = deltaY < 0 && node.scrollTop > 0
+          if (canDown || canUp) return true
+        }
+        if (canScrollX && deltaX !== 0) {
+          const canRight = deltaX > 0 && node.scrollLeft + node.clientWidth < node.scrollWidth
+          const canLeft = deltaX < 0 && node.scrollLeft > 0
+          if (canRight || canLeft) return true
+        }
+        node = node.parentElement
+      }
+      return false
+    }
+    const navigate = (dir: 'up' | 'down') => {
+      const fakeBtn = document.createElement('button')
+      fakeBtn.setAttribute('data-direction', dir)
+      handleArrow(fakeBtn as HTMLButtonElement)
+    }
+    const onWheel = (e: WheelEvent) => {
+      // Allow native scrolling inside scrollable descendants (e.g., sidebar, code)
+      const target = e.target as HTMLElement | null
+      // If the wheel event originates over the builder code pane, allow native scrolling
+      if (target && target.closest('.builder-right')) {
+        return
+      }
+      let dx = e.deltaX || 0
+      let dy = e.deltaY || 0
+      // Treat Shift+Wheel as horizontal intent when deltaX is 0
+      if (dx === 0 && e.shiftKey && dy !== 0) { dx = dy; dy = 0 }
+      if (isScrollableAncestor(target, dx, dy)) { return }
+      e.preventDefault()
+      if (isLocked) return
+      // Only navigate slides on vertical intent
+      if (dy === 0) { return }
+      const dir = dy > 0 ? 'down' : 'up'
+      isLocked = true
+      navigate(dir)
+      // simple lock to avoid repeated triggers while smooth scroll runs
+      setTimeout(() => { isLocked = false }, 650)
+    }
+    container.addEventListener('wheel', onWheel, { passive: false })
+    // Also forward wheel on header to the container so scrolling anywhere works
+    const header = document.getElementById('site-header') as HTMLElement | null
+    if (header) header.addEventListener('wheel', onWheel, { passive: false })
+  })()
 
 // --- Flow figure wiring ---
 ; (function () {
@@ -291,36 +335,41 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
 
   // --- Slide 3: Dataset builder + code generator ---
   ; (function () {
-    const mount = document.getElementById('ds-builder') as HTMLElement | null
-    const optPreFilter = document.getElementById('opt-pre-filter') as HTMLInputElement | null
-    const optPreTransform = document.getElementById('opt-pre-transform') as HTMLInputElement | null
-    const optTransform = document.getElementById('opt-transform') as HTMLInputElement | null
+    const mount = document.getElementById('config-panel') as HTMLElement | null
     const codeEl = document.getElementById('gen-code') as HTMLElement | null
-    const copyBtn = document.getElementById('copy-gen') as HTMLButtonElement | null
-    if (!mount || !codeEl || !copyBtn) return
+    if (!mount || !codeEl) return
 
-    type Item = { id: string; name: string; group: number; hasSubsets?: boolean }
+    type Item = { id: string; name: string; hasSubsets?: boolean; hasResolution?: boolean }
     const items: Item[] = [
-      { id: 'social', name: 'Social Networks', group: 1 },
-      { id: 'chip', name: 'Chip Design', group: 2 },
-      { id: 'circuits', name: 'Electronic Circuits', group: 2 },
-      { id: 'sat', name: 'SAT Solving', group: 3 },
-      { id: 'co', name: 'Combinatorial Optimization', group: 3 },
-      { id: 'ar', name: 'Algorithmic Reasoning', group: 3 },
-      { id: 'weather', name: 'Weather Forecasting', group: 4 },
+      { id: 'social', name: 'Social Networks' },
+      { id: 'chip', name: 'Chip Design' },
+      { id: 'circuits', name: 'Electronic Circuits' },
+      { id: 'sat', name: 'SAT Solving' },
+      { id: 'co', name: 'Combinatorial Optimization' },
+      { id: 'ar', name: 'Algorithmic Reasoning', hasSubsets: true },
+      { id: 'weather', name: 'Weather Forecasting', hasResolution: true },
     ]
 
-    // kept for reference if accent classes are reintroduced
-    // const accentFor = (g: number) => g === 1 ? 'accent-g1' : g === 2 ? 'accent-g2' : g === 3 ? 'accent-g3' : 'accent-g4'
+    // Define subsets for all datasets (single subset equal to main for simple ones)
+    const subsetsByDataset: Record<string, string[]> = {
+      social: ['social_networks'],
+      chip: ['chip_design'],
+      circuits: ['electronic_circuits'],
+      sat: ['sat_solving'],
+      co: ['combinatorial_optimization'],
+      ar: ['algo_res_easy', 'algo_res_medium', 'algo_res_hard'],
+      weather: ['era5_64x32', 'era5_240x121'],
+    }
 
-    // selection state
+    // state
     const selectedIds = new Set<string>()
-    const arSubsets = new Set<string>(['easy', 'medium', 'hard'])
-    let expandedId: string | null = null
+    const selectedSubsets = Object.fromEntries(Object.keys(subsetsByDataset).map(id => [id, new Set<string>()])) as Record<string, Set<string>>
+    const expandedIds = new Set<string>()
+    // splitMode removed from UI; left for potential future use
 
-    // default: select Algorithmic Reasoning (all subsets)
-    selectedIds.add('ar')
+    // defaults: none selected
 
+    // Local icon set for dataset rows
     const iconFor = (id: string): string => {
       switch (id) {
         case 'social': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M6 19c0-2.5 3-4 6-4s6 1.5 6 4"/></svg>'
@@ -334,60 +383,86 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       }
     }
 
-    const subsetsMarkup = (): string => {
-      const e = arSubsets.has('easy') ? 'checked' : ''
-      const m = arSubsets.has('medium') ? 'checked' : ''
-      const h = arSubsets.has('hard') ? 'checked' : ''
-      return `
-        <div class="ds-sublist">
-          <label class="toggle-row"><span class="name">easy</span><input type="checkbox" data-subset="easy" ${e} class="ds-check"/><span class="toggle" aria-hidden="true"></span></label>
-          <label class="toggle-row"><span class="name">medium</span><input type="checkbox" data-subset="medium" ${m} class="ds-check"/><span class="toggle" aria-hidden="true"></span></label>
-          <label class="toggle-row"><span class="name">hard</span><input type="checkbox" data-subset="hard" ${h} class="ds-check"/><span class="toggle" aria-hidden="true"></span></label>
-        </div>`
-    }
-
-    const render = () => {
-      const rows = items.map(r => {
-        const checked = selectedIds.has(r.id) ? 'checked' : ''
-        const selectedClass = checked ? ' selected' : ''
-        const withSub = r.hasSubsets && expandedId === r.id && selectedIds.has(r.id)
-        return `
-          <div>
-            <label class="ds-row accent-g${r.group}${selectedClass}" data-ds="${r.id}">
-              <span class="left"><span class="icon">${iconFor(r.id)}</span><span class="name">${r.name}</span></span>
-              <input type="checkbox" data-dsid="${r.id}" ${checked} class="ds-check" />
-              <span class="toggle" aria-hidden="true"></span>
-            </label>
-            ${r.hasSubsets ? `<div class=\"ds-subwrap\" data-open=\"${withSub ? 'true' : 'false'}\">${subsetsMarkup()}</div>` : ''}
-          </div>`
-      }).join('')
-
-      mount.innerHTML = `
-        <div class="ds-list" role="group" aria-label="Datasets selector">
-          ${rows}
-        </div>`
-    }
-
-    const datasetNameFor = (id: string): string[] => {
+    const colorVarFor = (id: string): string => {
       switch (id) {
-        case 'social': return ['social_networks']
-        case 'chip': return ['chip_design']
-        case 'circuits': return ['electronic_circuits']
-        case 'sat': return ['sat_solving']
-        case 'co': return ['combinatorial_optimization']
-        case 'weather': return ['weather_forecasting']
-        case 'ar':
-          return ['algorithmic_reasoning']
-        default: return []
+        case 'social': return 'var(--ds-g1)'
+        case 'chip':
+        case 'circuits': return 'var(--ds-g2)'
+        case 'sat':
+        case 'co':
+        case 'ar': return 'var(--ds-g3)'
+        case 'weather': return 'var(--ds-g4)'
+        default: return 'var(--text-2)'
       }
     }
 
+    const subRowsMarkupFor = (dsId: string): string => {
+      const parentSelected = selectedIds.has(dsId)
+      const subs = subsetsByDataset[dsId] || []
+      const sel = selectedSubsets[dsId] || new Set<string>()
+      const rows = subs.map(sub => {
+        const checked = parentSelected && sel.has(sub) ? 'checked' : ''
+        return `<label class="sub-row"><input type="checkbox" data-sub-ds="${dsId}" data-sub="${sub}" ${checked}/> <span class="sub-name">${sub}</span></label>`
+      }).join('')
+      return `<div class="side-sub">${rows}</div>`
+    }
+
+    const render = () => {
+      const chev = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>'
+      const dsRows = items.map(r => {
+        const checked = selectedIds.has(r.id)
+        const isExpanded = expandedIds.has(r.id)
+        const hasDrop = (subsetsByDataset[r.id] || []).length > 0
+        const sub = hasDrop ? subRowsMarkupFor(r.id) : ''
+        return `
+          <div class="ds-item" data-ds="${r.id}">
+            <div class="side-row ds-main" data-dsrow>
+              <label class="side-check"><input type="checkbox" data-select="${r.id}" ${checked ? 'checked' : ''}/></label>
+              <span class="ds-icon" style="color:${colorVarFor(r.id)}">${iconFor(r.id)}</span>
+              <span class="ds-name">${r.name}</span>
+              ${hasDrop ? `<button class="ds-disclose" data-ds-toggle="${r.id}" aria-expanded="${isExpanded}" aria-label="Toggle options">${chev}</button>` : '<span class="ds-disclose ds-space" aria-hidden="true"></span>'}
+            </div>
+            ${hasDrop ? `<div class="ds-subwrap" data-open="${isExpanded}"><div class="ds-sub">${sub}</div></div>` : ''}
+          </div>`
+      }).join('')
+
+      const optPF = document.getElementById('opt-pre-filter') as HTMLInputElement | null
+      const optPT = document.getElementById('opt-pre-transform') as HTMLInputElement | null
+      const optT = document.getElementById('opt-transform') as HTMLInputElement | null
+
+      mount.innerHTML = `
+        <div class="side-group" aria-label="Your model options">
+          <div class="side-collapsible model-opts" data-open="false" id="model-coll">
+            <div class="head" data-coll-toggle="model-coll">
+              <span class="label">Your model options</span>
+              <button class="ds-disclose" data-coll-toggle="model-coll" aria-expanded="false" aria-label="Toggle model options">${chev}</button>
+            </div>
+            <div class="body">
+              <div class="opts-intro">I want to use my custom...</div>
+              <label class="side-row"><input type="checkbox" id="opt-pre-filter" ${optPF && optPF.checked ? 'checked' : ''}/> <span>pre_filter</span></label>
+              <label class="side-row"><input type="checkbox" id="opt-pre-transform" ${optPT && optPT.checked ? 'checked' : ''}/> <span>pre_transform</span></label>
+              <label class="side-row"><input type="checkbox" id="opt-transform" ${optT && optT.checked ? 'checked' : ''}/> <span>transform</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="side-group" aria-label="Datasets">
+          <div class="side-label">Datasets</div>
+          <div class="side-list">${dsRows}</div>
+        </div>`
+    }
+
+    // Compute selected subset names for code generation
+    const selectedSubsetNames = (): string[] => {
+      const ids = Array.from(selectedIds.values())
+      return ids.flatMap(id => Array.from(selectedSubsets[id] || []))
+    }
+
     const genPlainCode = (): string => {
-      const names = Array.from(selectedIds.values()).flatMap(datasetNameFor)
+      const names = selectedSubsetNames()
       const useList = names.length !== 1
-      const optPF = !!(optPreFilter && optPreFilter.checked)
-      const optPT = !!(optPreTransform && optPreTransform.checked)
-      const optT = !!(optTransform && optTransform.checked)
+      const optPF = !!(document.getElementById('opt-pre-filter') as HTMLInputElement | null)?.checked
+      const optPT = !!(document.getElementById('opt-pre-transform') as HTMLInputElement | null)?.checked
+      const optT = !!(document.getElementById('opt-transform') as HTMLInputElement | null)?.checked
       const lines: string[] = []
       lines.push('import graphbench')
       lines.push('')
@@ -451,42 +526,106 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       const plain = genPlainCode()
       const colored = tokenColorize(plain)
       codeEl.innerHTML = colored
-      copyBtn.setAttribute('data-copy', plain)
+      // copy button removed; no-op assignment
+    }
+
+    const syncDisclosureUI = () => {
+      const list = mount.querySelectorAll('.ds-item') as NodeListOf<HTMLElement>
+      list.forEach(item => {
+        const id = item.getAttribute('data-ds') || ''
+        const subwrap = item.querySelector('.ds-subwrap') as HTMLElement | null
+        const toggleBtn = item.querySelector('[data-ds-toggle]') as HTMLButtonElement | null
+        const open = expandedIds.has(id)
+        if (subwrap) subwrap.setAttribute('data-open', open ? 'true' : 'false')
+        if (toggleBtn) toggleBtn.setAttribute('aria-expanded', open.toString())
+        // sync subset checkboxes to current state
+        const inputs = item.querySelectorAll('input[data-sub]') as NodeListOf<HTMLInputElement>
+        const parentSelected = selectedIds.has(id)
+        const sel = selectedSubsets[id] || new Set<string>()
+        inputs.forEach(inp => {
+          const sub = inp.getAttribute('data-sub') || ''
+          inp.checked = parentSelected && sel.has(sub)
+        })
+        // sync main checkbox visual if needed (event target already accurate)
+        const main = item.querySelector('input[data-select]') as HTMLInputElement | null
+        if (main && main.getAttribute('data-select') === id) {
+          main.checked = selectedIds.has(id)
+        }
+      })
     }
 
     mount.addEventListener('change', (e) => {
       const t = e.target as HTMLInputElement
-      if (!t || t.type !== 'checkbox') return
-      const dsId = t.getAttribute('data-dsid')
-      const subsetId = t.getAttribute('data-subset')
+      if (!t) return
+      const dsId = t.getAttribute('data-select')
+      const subDsId = t.getAttribute('data-sub-ds')
+      const subValue = t.getAttribute('data-sub')
+      const idAttr = t.getAttribute('id')
       if (dsId) {
-        if (t.checked) { selectedIds.add(dsId) } else { selectedIds.delete(dsId) }
-        // Update row styling without rebuilding the entire list so CSS transitions can play
-        const row = t.closest('.ds-row') as HTMLElement | null
-        if (row) row.classList.toggle('selected', t.checked)
-        update(); return
+        if (t.checked) {
+          selectedIds.add(dsId)
+          // Select all subsets for this dataset
+          selectedSubsets[dsId] = new Set<string>((subsetsByDataset[dsId] || []))
+          // Expand current, collapse others
+          expandedIds.clear(); expandedIds.add(dsId)
+        } else {
+          selectedIds.delete(dsId)
+          selectedSubsets[dsId].clear()
+          expandedIds.delete(dsId)
+        }
+        // Update UI in place for smooth animation
+        syncDisclosureUI(); update(); return
       }
-      if (subsetId) {
-        if (subsetId === 'easy') { t.checked ? arSubsets.add('easy') : arSubsets.delete('easy') }
-        if (subsetId === 'medium') { t.checked ? arSubsets.add('medium') : arSubsets.delete('medium') }
-        if (subsetId === 'hard') { t.checked ? arSubsets.add('hard') : arSubsets.delete('hard') }
-        ensureSubsetAtLeastOne(); render(); update(); return
+      if (subDsId && subValue) {
+        const set = selectedSubsets[subDsId] || new Set<string>()
+        if (t.checked) { set.add(subValue) } else { set.delete(subValue) }
+        selectedSubsets[subDsId] = set
+        syncDisclosureUI(); update(); return
+      }
+      if (idAttr === 'opt-pre-filter' || idAttr === 'opt-pre-transform' || idAttr === 'opt-transform') { update(); return }
+    })
+
+    mount.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('button') as HTMLButtonElement | null
+      if (!btn) return
+      const mode = btn.getAttribute('data-mode') as 'standard' | 'custom' | null
+      if (mode) { return }
+      // toggle model collapsible
+      const collToggle = (e.target as HTMLElement).closest('[data-coll-toggle]') as HTMLElement | null
+      if (collToggle) {
+        const id = collToggle.getAttribute('data-coll-toggle') || ''
+        const el = document.getElementById(id)
+        if (el) {
+          const open = el.getAttribute('data-open') === 'true'
+          el.setAttribute('data-open', open ? 'false' : 'true')
+          const btn = el.querySelector('.head [data-coll-toggle]') as HTMLButtonElement | null
+          if (btn) btn.setAttribute('aria-expanded', (!open).toString())
+        }
+        return
+      }
+      const dsToggle = btn.getAttribute('data-ds-toggle')
+      if (dsToggle) {
+        const willOpen = !expandedIds.has(dsToggle)
+        if (willOpen) { expandedIds.clear(); expandedIds.add(dsToggle) } else { expandedIds.delete(dsToggle) }
+        syncDisclosureUI();
+        return
+      }
+      const subPlus = btn.getAttribute('data-sub-plus') || ''
+      if (subPlus) {
+        const panel = mount.querySelector(`[data-sub-opt="${subPlus}"]`) as HTMLElement | null
+        const expanded = btn.getAttribute('aria-expanded') === 'true'
+        if (panel) {
+          panel.hidden = expanded
+          btn.setAttribute('aria-expanded', (!expanded).toString())
+        }
+        return
       }
     })
 
-    const ensureSubsetAtLeastOne = () => {
-      if (arSubsets.size === 0) { arSubsets.add('easy') }
-    }
+    // copy button removed; no click handler needed
 
-    if (optPreFilter) optPreFilter.addEventListener('change', update)
-    if (optPreTransform) optPreTransform.addEventListener('change', update)
-    if (optTransform) optTransform.addEventListener('change', update)
-
-    copyBtn.addEventListener('click', async () => {
-      const text = copyBtn.getAttribute('data-copy') || ''
-      try { await navigator.clipboard.writeText(text) } catch { }
-    })
-
-    render(); ensureSubsetAtLeastOne(); update()
+    render(); update()
   })()
+
+// Removed copy button visibility toggle
 
