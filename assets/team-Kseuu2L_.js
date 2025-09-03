@@ -1,4 +1,4 @@
-import{r as e}from"./layout-B4TYi_6s.js";const t=document.querySelector("#app");t.innerHTML=e("team",`
+import{r as e}from"./layout-dJMx-EO5.js";const t=document.querySelector("#app");t.innerHTML=e("team",`
   <section class="page-header">
     <div class="container">
       <div class="title-row">
