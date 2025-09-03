@@ -1,19 +1,25 @@
 import '../style.css'
-import { renderLayout } from '../shared/layout'
-import { renderLayout as _unused } from '../shared/layout'
+import { renderLayout, enhanceInteractions } from '../shared/layout'
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 
 app.innerHTML = renderLayout('home', `
   <!-- Slide 1: Hero -->
   <section class="snap-section hero hero-primary">
-    <div class="container">
-      <h1>Modern Benchmarking for Graph Learning</h1>
-      <p>GraphBench provides standardized datasets, clear protocols, and reproducible baselines for evaluating graph machine learning across tasks and scales.</p>
-      <div class="cta">
-        <a href="./quickstart.html" class="btn btn-primary">Get Started</a>
-        <a href="./datasets.html" class="btn btn-outline">Explore Datasets</a>
+    <div class="container hero-grid">
+      <div class="hero-left">
+        <h1 class="hero-title"><span class="hero-brand">GraphBench:</span> Next-generation graph learning benchmarking</h1>
+        <p class="hero-abstract">We present Graphbench, a comprehensive graph learning benchmark across <span class="hero-highlight">domains</span> and prediction <span class="hero-highlight">regimes</span>. GraphBench standardizes <span class="hero-highlight">evaluation</span> with consistent <span class="hero-highlight">splits</span>, <span class="hero-highlight">metrics</span>, and <span class="hero-highlight">out-of-distribution</span> checks, and includes a unified <span class="hero-highlight">hyperparameter tuning</span> framework. We also provide strong <span class="hero-highlight">baselines</span> with state-of-the-art message-passing and graph transformer models and easy <span class="hero-highlight">plug-and-play code</span> to get you started.</p>
+        <p class="hero-subtext">Scroll down to learn more, explore our datasets or jump right in!</p>
+        <div class="cta">
+          <a href="./quickstart.html" class="btn btn-primary">Get Started</a>
+          <a href="./datasets.html" class="btn btn-outline">Explore Datasets</a>
+        </div>
       </div>
+      <div class="hero-right" aria-hidden="true">
+        <img src="./Graphland.svg" alt="Graph network visualization" class="hero-graphland" />
+      </div>
+      <div class="arrow-background"></div>
       <button id="down-arrow" aria-label="Scroll to datasets" class="arrow-btn arrow-down" title="Scroll">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <polyline points="6 9 12 15 18 9"></polyline>
@@ -111,7 +117,7 @@ app.innerHTML = renderLayout('home', `
   </section>
 
   <!-- Slide 3: GUI + Generated code -->
-  <section class="snap-section section-white builder-section" style="background:#fff;">
+  <section id="builder" class="snap-section section-white builder-section" style="background:#fff;">
     <div class="container">
       <p class="builder-intro">Configure on the left. Code updates live on the right.</p>
       <div class="builder-grid">
@@ -125,9 +131,12 @@ app.innerHTML = renderLayout('home', `
         <aside class="builder-right">
           <div class="builder-canvas code-card">
             <div class="code-wrap builder-code">
+              <button class="copy-btn builder-copy-btn" data-copy="" aria-label="Copy generated code" title="Copy">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
               <pre><code id="gen-code" class="code-manual"></code></pre>
             </div>
-            <div class="builder-help">Copy and paste the code and you’re ready to go.</div>
+            <div class="builder-help">Copy and paste the code and you're ready to go.</div>
           </div>
         </aside>
       </div>
@@ -137,7 +146,6 @@ app.innerHTML = renderLayout('home', `
           <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
       </button>
-      <div class="arrow-caption arrow-caption-up arrow-caption-left">What's in it?</div>
     </div>
   </section>
 `, 'snap-container')
@@ -241,7 +249,7 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
     switch (id) {
       case 'social': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M6 19c0-2.5 3-4 6-4s6 1.5 6 4"/></svg>'
       case 'chip': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M7 3v2M12 3v2M17 3v2M21 7h-2M21 12h-2M21 17h-2M3 7h2M3 12h2M3 17h2M7 21v-2M12 21v-2M17 21v-2"/></svg>'
-      case 'circuits': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="6.5" width="3" height="3" rx="0.5"/><rect x="16.5" y="6.5" width="3" height="3" rx="0.5"/><rect x="10.5" y="14.5" width="3" height="3" rx="0.5"/><path d="M7.5 8h6v4h3"/></svg>'
+      case 'circuits': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="10" y="2" width="4" height="2" rx="0.5"/><rect x="20" y="10" width="2" height="4" rx="0.5"/><rect x="10" y="20" width="4" height="2" rx="0.5"/><rect x="2" y="10" width="2" height="4" rx="0.5"/><path d="M4 12h7v2h2h5"/></svg>'
       case 'sat': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h6a5 5 0 0 1 0 10H6z"/><path d="M6 9H3M6 15H3M17 12h4"/></svg>'
       case 'co': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16" stroke-dasharray="3 3"/><circle cx="6" cy="8" r="2"/><circle cx="6" cy="16" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="18" cy="16" r="2"/><path d="M8 9l3 2"/><path d="M13 11l3 2"/><path d="M8 15l3-2"/><path d="M13 13l3-2"/></svg>'
       case 'ar': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="6" height="4" rx="1"/><rect x="15" y="3" width="6" height="4" rx="1"/><rect x="9" y="17" width="6" height="4" rx="1"/><path d="M6 7v4h12V7M12 13v4"/></svg>'
@@ -365,7 +373,8 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
     const selectedIds = new Set<string>()
     const selectedSubsets = Object.fromEntries(Object.keys(subsetsByDataset).map(id => [id, new Set<string>()])) as Record<string, Set<string>>
     const expandedIds = new Set<string>()
-    // splitMode removed from UI; left for potential future use
+    const customSplits = Object.fromEntries(Object.keys(subsetsByDataset).map(id => [id, {}])) as Record<string, Record<string, { train: number, valid: number, test: number }>>
+    const openSplitPanels = new Set<string>()
 
     // defaults: none selected
 
@@ -374,7 +383,7 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       switch (id) {
         case 'social': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M6 19c0-2.5 3-4 6-4s6 1.5 6 4"/></svg>'
         case 'chip': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M7 3v2M12 3v2M17 3v2M21 7h-2M21 12h-2M21 17h-2M3 7h2M3 12h2M3 17h2M7 21v-2M12 21v-2M17 21v-2"/></svg>'
-        case 'circuits': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="6.5" width="3" height="3" rx="0.5"/><rect x="16.5" y="6.5" width="3" height="3" rx="0.5"/><rect x="10.5" y="14.5" width="3" height="3" rx="0.5"/><path d="M7.5 8h6v4h3"/></svg>'
+        case 'circuits': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="10" y="2" width="4" height="2" rx="0.5"/><rect x="20" y="10" width="2" height="4" rx="0.5"/><rect x="10" y="20" width="4" height="2" rx="0.5"/><rect x="2" y="10" width="2" height="4" rx="0.5"/><path d="M4 12h7v2h2h5"/></svg>'
         case 'sat': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h6a5 5 0 0 1 0 10H6z"/><path d="M6 9H3M6 15H3M17 12h4"/></svg>'
         case 'co': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16" stroke-dasharray="3 3"/><circle cx="6" cy="8" r="2"/><circle cx="6" cy="16" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="18" cy="16" r="2"/><path d="M8 9l3 2"/><path d="M13 11l3 2"/><path d="M8 15l3-2"/><path d="M13 13l3-2"/></svg>'
         case 'ar': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="6" height="4" rx="1"/><rect x="15" y="3" width="6" height="4" rx="1"/><rect x="9" y="17" width="6" height="4" rx="1"/><path d="M6 7v4h12V7M12 13v4"/></svg>'
@@ -402,9 +411,65 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       const sel = selectedSubsets[dsId] || new Set<string>()
       const rows = subs.map(sub => {
         const checked = parentSelected && sel.has(sub) ? 'checked' : ''
-        return `<label class="sub-row"><input type="checkbox" data-sub-ds="${dsId}" data-sub="${sub}" ${checked}/> <span class="sub-name">${sub}</span></label>`
+        const splitSlider = splitSliderMarkup(dsId, sub)
+        const safeId = `sub_${dsId}_${sub}`.replace(/[^a-zA-Z0-9_-]/g, '-')
+        return `<div class="sub-row-container">
+          <div class="sub-row">
+            <input id="${safeId}" type="checkbox" data-sub-ds="${dsId}" data-sub="${sub}" ${checked}/>
+            <label class="sub-name" for="${safeId}">
+              <span class="sub-text">${sub}</span>
+              <button type="button" class="sub-plus-btn" data-sub-plus="${dsId}-${sub}" aria-label="Add custom options for ${sub}" title="Add options">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+              <div class="sub-options" data-sub-opts="${dsId}-${sub}" hidden>
+                <button class="sub-opt-row" data-action="add-mask" data-sub-ds="${dsId}" data-sub="${sub}">Add custom train/valid/test mask</button>
+                <!-- future options go here -->
+              </div>
+            </label>
+          </div>
+          ${splitSlider}
+        </div>`
       }).join('')
       return `<div class="side-sub">${rows}</div>`
+    }
+
+    const splitSliderMarkup = (dsId: string, subId: string): string => {
+      const splitKey = `${dsId}-${subId}`
+      const currentSplit = customSplits[dsId]?.[subId] || { train: 80, valid: 10, test: 10 }
+      const isOpen = openSplitPanels.has(splitKey)
+
+      if (!isOpen) return ''
+
+      return `
+        <div class="split-panel" data-split-panel="${splitKey}">
+          <div class="split-header">Train/Valid/Test Mask
+            <button type="button" class="split-remove-btn" data-remove-split="${splitKey}" aria-label="Remove mask" title="Remove">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+          </div>
+          <div class="split-slider-container">
+            <div class="split-slider" data-split-key="${splitKey}">
+              <div class="split-track">
+                <div class="split-segment train" style="left: 0%; width: ${currentSplit.train}%"></div>
+                <div class="split-segment valid" style="left: ${currentSplit.train}%; width: ${currentSplit.valid}%"></div>
+                <div class="split-segment test" style="left: ${currentSplit.train + currentSplit.valid}%; width: ${currentSplit.test}%"></div>
+              </div>
+              <div class="split-handles">
+                <div class="split-handle" data-handle="p1" style="left: ${currentSplit.train}%"></div>
+                <div class="split-handle" data-handle="p2" style="left: ${currentSplit.train + currentSplit.valid}%"></div>
+              </div>
+            </div>
+            <div class="split-labels">
+              <span class="split-label train">Train: ${currentSplit.train}%</span>
+              <span class="split-label valid">Valid: ${currentSplit.valid}%</span>
+              <span class="split-label test">Test: ${currentSplit.test}%</span>
+            </div>
+          </div>
+        </div>
+      `
     }
 
     const render = () => {
@@ -481,6 +546,29 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       if (optPF) lines.push('pre_filter = ...  # optional: PyG pre-filter matrix')
       if (optPT) lines.push('pre_transform = ...  # optional: transform applied at load-time')
       if (optT) lines.push('transform = ...  # optional: transform applied at runtime')
+
+      // Add custom splits if any exist
+      const hasCustomSplits = names.some(name => {
+        const entry = Object.entries(subsetsByDataset).find(([_, subs]) => subs.includes(name))
+        if (!entry) return false
+        const [dsId] = entry
+        return dsId && customSplits[dsId]?.[name]
+      })
+
+      if (hasCustomSplits) {
+        lines.push('')
+        lines.push('# Custom train/valid/test splits')
+        names.forEach(name => {
+          const entry = Object.entries(subsetsByDataset).find(([_, subs]) => subs.includes(name))
+          if (!entry) return
+          const [dsId] = entry
+          if (dsId && customSplits[dsId]?.[name]) {
+            const split = customSplits[dsId][name]
+            lines.push(`split_${name.replace(/[^a-zA-Z0-9]/g, '_')} = (${split.train / 100}, ${split.valid / 100}, ${split.test / 100})  # ${name}`)
+          }
+        })
+      }
+
       lines.push('')
       if (useList) {
         const args: string[] = []
@@ -526,7 +614,11 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       const plain = genPlainCode()
       const colored = tokenColorize(plain)
       codeEl.innerHTML = colored
-      // copy button removed; no-op assignment
+      // Update copy button with current code
+      const copyBtn = document.querySelector('.builder-copy-btn') as HTMLButtonElement | null
+      if (copyBtn) {
+        copyBtn.setAttribute('data-copy', plain)
+      }
     }
 
     const syncDisclosureUI = () => {
@@ -564,12 +656,13 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       if (dsId) {
         if (t.checked) {
           selectedIds.add(dsId)
-          // Select all subsets for this dataset
+          // Select ALL subsets for parent selection
           selectedSubsets[dsId] = new Set<string>((subsetsByDataset[dsId] || []))
           // Expand current, collapse others
           expandedIds.clear(); expandedIds.add(dsId)
         } else {
           selectedIds.delete(dsId)
+          // Unselect ALL subsets
           selectedSubsets[dsId].clear()
           expandedIds.delete(dsId)
         }
@@ -577,15 +670,43 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
         syncDisclosureUI(); update(); return
       }
       if (subDsId && subValue) {
+        // Ensure parent dataset is selected when any subset is selected
         const set = selectedSubsets[subDsId] || new Set<string>()
-        if (t.checked) { set.add(subValue) } else { set.delete(subValue) }
+        if (t.checked) {
+          set.add(subValue)
+          selectedIds.add(subDsId)
+          // Do NOT auto-select other subsets here
+        } else {
+          set.delete(subValue)
+          // If no subsets remain selected, unselect the parent
+          if (set.size === 0) {
+            selectedIds.delete(subDsId)
+          }
+        }
         selectedSubsets[subDsId] = set
+        // Keep current dataset expanded for visibility
+        expandedIds.add(subDsId)
         syncDisclosureUI(); update(); return
       }
       if (idAttr === 'opt-pre-filter' || idAttr === 'opt-pre-transform' || idAttr === 'opt-transform') { update(); return }
     })
 
     mount.addEventListener('click', (e) => {
+      // Dedicated handler for sub-plus triggers
+      const plusEl = (e.target as HTMLElement).closest('[data-sub-plus]') as HTMLElement | null
+      if (plusEl) {
+        e.preventDefault()
+        e.stopPropagation()
+        const key = plusEl.getAttribute('data-sub-plus') || ''
+        if (key) {
+          // close any open options first
+          mount.querySelectorAll<HTMLElement>('.sub-options').forEach(el => { el.hidden = true })
+          const pop = mount.querySelector(`[data-sub-opts="${key}"]`) as HTMLElement | null
+          if (pop) pop.hidden = false
+        }
+        return
+      }
+
       const btn = (e.target as HTMLElement).closest('button') as HTMLButtonElement | null
       if (!btn) return
       const mode = btn.getAttribute('data-mode') as 'standard' | 'custom' | null
@@ -610,22 +731,161 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
         syncDisclosureUI();
         return
       }
-      const subPlus = btn.getAttribute('data-sub-plus') || ''
-      if (subPlus) {
-        const panel = mount.querySelector(`[data-sub-opt="${subPlus}"]`) as HTMLElement | null
-        const expanded = btn.getAttribute('aria-expanded') === 'true'
-        if (panel) {
-          panel.hidden = expanded
-          btn.setAttribute('aria-expanded', (!expanded).toString())
-        }
+      // fallthrough for other buttons
+    })
+
+    // Allow clicking anywhere on dataset row to expand/collapse (not only arrow)
+    mount.addEventListener('click', (e) => {
+      const row = (e.target as HTMLElement).closest('.side-row[data-dsrow]') as HTMLElement | null
+      if (!row) return
+      // ignore if clicking the checkbox or disclose button itself
+      const isCheckbox = (e.target as HTMLElement).closest('input[type="checkbox"]')
+      const isDiscloseBtn = (e.target as HTMLElement).closest('[data-ds-toggle]')
+      if (isCheckbox || isDiscloseBtn) return
+      const item = row.closest('.ds-item') as HTMLElement | null
+      const dsId = item?.getAttribute('data-ds') || ''
+      if (!dsId) return
+      const willOpen = !expandedIds.has(dsId)
+      if (willOpen) { expandedIds.clear(); expandedIds.add(dsId) } else { expandedIds.delete(dsId) }
+      syncDisclosureUI()
+    })
+
+    // Allow clicking anywhere on the model options header area to expand/collapse
+    mount.addEventListener('click', (e) => {
+      const coll = (e.target as HTMLElement).closest('#model-coll') as HTMLElement | null
+      if (!coll) return
+      const head = (e.target as HTMLElement).closest('#model-coll .head') as HTMLElement | null
+      const isToggleBtn = (e.target as HTMLElement).closest('#model-coll [data-coll-toggle]')
+      const isInteractive = (e.target as HTMLElement).closest('#model-coll .body input, #model-coll .body button, #model-coll .body label')
+      // If clicking in header area or empty part of container (not on inputs), toggle
+      if (head || (!isInteractive && !isToggleBtn && (e.target as HTMLElement).closest('#model-coll'))) {
+        const open = coll.getAttribute('data-open') === 'true'
+        coll.setAttribute('data-open', open ? 'false' : 'true')
+        const tbtn = coll.querySelector('.head [data-coll-toggle]') as HTMLButtonElement | null
+        if (tbtn) tbtn.setAttribute('aria-expanded', (!open).toString())
+      }
+    })
+
+    // Handle clicks on options within the sub-options popover
+    mount.addEventListener('click', (e) => {
+      const opt = (e.target as HTMLElement).closest('.sub-opt-row') as HTMLButtonElement | null
+      if (!opt) return
+      const action = opt.getAttribute('data-action')
+      if (action === 'add-mask') {
+        const ds = opt.getAttribute('data-sub-ds') || ''
+        const sub = opt.getAttribute('data-sub') || ''
+        const key = `${ds}-${sub}`
+        openSplitPanels.add(key)
+        // hide the options popover
+        const pop = mount.querySelector(`[data-sub-opts="${key}"]`) as HTMLElement | null
+        if (pop) pop.hidden = true
+        render(); update()
         return
       }
     })
 
+    // Remove split mask via minus button
+    mount.addEventListener('click', (e) => {
+      const rm = (e.target as HTMLElement).closest('[data-remove-split]') as HTMLElement | null
+      if (!rm) return
+      e.preventDefault()
+      const key = rm.getAttribute('data-remove-split') || ''
+      if (!key) return
+      const [dsId, subId] = key.split('-')
+      // close panel and delete custom split
+      openSplitPanels.delete(key)
+      if (customSplits[dsId] && customSplits[dsId][subId]) {
+        delete customSplits[dsId][subId]
+      }
+      render(); update()
+    })
+
     // copy button removed; no click handler needed
+
+    // Update only the UI of a split slider (no full rerender)
+    const updateSplitUI = (splitKey: string) => {
+      const [dsId, subId] = splitKey.split('-')
+      const current = customSplits[dsId]?.[subId]
+      if (!current) return
+      const root = document.querySelector(`.split-panel[data-split-panel="${splitKey}"]`) as HTMLElement | null
+      if (!root) return
+      const p1Val = current.train
+      const p2Val = current.train + current.valid
+      const trainSeg = root.querySelector('.split-segment.train') as HTMLElement | null
+      const validSeg = root.querySelector('.split-segment.valid') as HTMLElement | null
+      const testSeg = root.querySelector('.split-segment.test') as HTMLElement | null
+      if (trainSeg) { trainSeg.style.left = '0%'; trainSeg.style.width = `${current.train}%` }
+      if (validSeg) { validSeg.style.left = `${p1Val}%`; validSeg.style.width = `${current.valid}%` }
+      if (testSeg) { testSeg.style.left = `${p2Val}%`; testSeg.style.width = `${current.test}%` }
+      const h1 = root.querySelector('.split-handle[data-handle="p1"]') as HTMLElement | null
+      const h2 = root.querySelector('.split-handle[data-handle="p2"]') as HTMLElement | null
+      if (h1) h1.style.left = `${p1Val}%`
+      if (h2) h2.style.left = `${p2Val}%`
+      const labTrain = root.querySelector('.split-label.train') as HTMLElement | null
+      const labValid = root.querySelector('.split-label.valid') as HTMLElement | null
+      const labTest = root.querySelector('.split-label.test') as HTMLElement | null
+      if (labTrain) labTrain.textContent = `Train: ${current.train}%`
+      if (labValid) labValid.textContent = `Valid: ${current.valid}%`
+      if (labTest) labTest.textContent = `Test: ${current.test}%`
+    }
+
+    // Add slider interaction handlers with 1% snapping and two-handle logic
+    const handleSliderUpdate = (splitKey: string, handleType: 'p1' | 'p2', newPosition: number) => {
+      const [dsId, subId] = splitKey.split('-')
+      if (!customSplits[dsId]) customSplits[dsId] = {}
+      if (!customSplits[dsId][subId]) customSplits[dsId][subId] = { train: 80, valid: 10, test: 10 }
+
+      const current = customSplits[dsId][subId]
+      let p1 = current.train
+      let p2 = current.train + current.valid
+
+      const pos = Math.max(0, Math.min(100, Math.round(newPosition)))
+      if (handleType === 'p1') {
+        p1 = Math.max(0, Math.min(pos, p2))
+      } else {
+        p2 = Math.max(p1, Math.min(pos, 100))
+      }
+
+      const train = p1
+      const valid = Math.max(0, p2 - p1)
+      const test = Math.max(0, 100 - p2)
+      customSplits[dsId][subId] = { train, valid, test }
+      updateSplitUI(splitKey)
+      update()
+    }
+
+    // Add mouse event listeners for sliders
+    mount.addEventListener('mousedown', (e) => {
+      const handle = (e.target as HTMLElement).closest('.split-handle') as HTMLElement | null
+      if (!handle) return
+
+      e.preventDefault()
+      const slider = handle.closest('.split-slider') as HTMLElement | null
+      if (!slider) return
+
+      const splitKey = slider.getAttribute('data-split-key') || ''
+      const handleType = handle.getAttribute('data-handle') as 'p1' | 'p2'
+      const sliderRect = slider.getBoundingClientRect()
+
+      const updatePosition = (clientX: number) => {
+        const x = clientX - sliderRect.left
+        const percentage = Math.max(0, Math.min(100, (x / sliderRect.width) * 100))
+        handleSliderUpdate(splitKey, handleType, percentage)
+      }
+
+      const onMouseMove = (e: MouseEvent) => updatePosition(e.clientX)
+      const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove)
+        document.removeEventListener('mouseup', onMouseUp)
+      }
+
+      document.addEventListener('mousemove', onMouseMove)
+      document.addEventListener('mouseup', onMouseUp)
+    })
 
     render(); update()
   })()
 
-// Removed copy button visibility toggle
+// Initialize copy button functionality
+enhanceInteractions()
 

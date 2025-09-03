@@ -131,6 +131,18 @@ app.innerHTML = renderLayout('quickstart', `
             </div>
           </li>
 
+          <!-- Builder CTA -->
+          <li class="step">
+            <div class="num">→</div>
+            <div class="body">
+              <h3>Assemble your custom GraphCast code</h3>
+              <p>Use our interactive builder to configure datasets and generate your full GraphCast script.</p>
+              <div style="text-align:center; margin:.6rem 0 0;">
+                <a class="btn btn-primary" href="./index.html#builder" title="Open the code builder" style="border:none; color:#fff;">Let's Go!</a>
+              </div>
+            </div>
+          </li>
+
           <li class="step">
             <div class="num">★</div>
             <div class="body">

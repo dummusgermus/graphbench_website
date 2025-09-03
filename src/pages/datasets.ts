@@ -23,8 +23,8 @@ const dsIcon = (id: string): string => {
       // microchip
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M7 3v2M12 3v2M17 3v2M21 7h-2M21 12h-2M21 17h-2M3 7h2M3 12h2M3 17h2M7 21v-2M12 21v-2M17 21v-2"/></svg>'
     case 'circuits':
-      // small PCB: three pads and orthogonal traces
-      return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="6.5" width="3" height="3" rx="0.5"/><rect x="16.5" y="6.5" width="3" height="3" rx="0.5"/><rect x="10.5" y="14.5" width="3" height="3" rx="0.5"/><path d="M7.5 8h6v4h3"/></svg>'
+      // circuit loop with components on the path
+      return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="10" y="2" width="4" height="2" rx="0.5"/><rect x="20" y="10" width="2" height="4" rx="0.5"/><rect x="10" y="20" width="4" height="2" rx="0.5"/><rect x="2" y="10" width="2" height="4" rx="0.5"/><path d="M4 12h7v2h2h5"/></svg>'
     case 'sat':
       // AND gate style
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h6a5 5 0 0 1 0 10H6z"/><path d="M6 9H3M6 15H3M17 12h4"/></svg>'
@@ -104,8 +104,8 @@ const dsSlide = (r: Ds, idx: number, total: number): string => {
     : r.id === 'ar'
       ? `<p>We synthetically generate unique graphs by sampling from <strong class="accent-num tip-link tip-enhanced" data-vars="Erdős–Rényi \nNewman–Watts–Strogatz \nBarabási–Albert \nDual Barabási–Albert \nPowerlaw Cluster \nStochastic Block Model" tabindex="0" role="button" aria-label="Show details" style="--tip-accent: var(--ds-g3);">6</strong> different generators. We then apply <strong class="accent-num tip-link tip-enhanced" data-vars="Maximum Clique\nShortest Path\nMaximum Spanning Tree\nSteiner Tree\nMaximum Flow\nBipartite Matching\nBridge Finding" tabindex="0" role="button" aria-label="Show details" style="--tip-accent: var(--ds-g3);">7</strong> algorithmic reasoning tasks to these graphs, ensuring interesting results by choosing unique parameters for each combination. You can take a look at the resulting structures on the right.</p>
        <p>We use graphs of size <strong class="accent-num" style="--tip-accent: var(--ds-g3);">16</strong> for training, <strong class="accent-num" style="--tip-accent: var(--ds-g3);">128</strong> for testing and up to <strong class="accent-num" style="--tip-accent: var(--ds-g3);">2048</strong> for size generalization, offering datasets in <strong class="accent-num tip-link tip-enhanced" data-vars="Easy:\nTraining|Erdős–Rényi, Newman–Watts–Strogatz, Barabási–Albert, Dual Barabási–Albert, Powerlaw Cluster, Stochastic Block Model\nTest|Erdős–Rényi, Newman–Watts–Strogatz, Barabási–Albert, Dual Barabási–Albert, Powerlaw Cluster, Stochastic Block Model\n\nMedium:\nTraining|Erdős–Rényi, Barabási–Albert, Stochastic Block Model \nTest|Erdős–Rényi, Newman–Watts–Strogatz, Barabási–Albert, Dual Barabási–Albert, Powerlaw Cluster, Stochastic Block Model\n\nHard:\nTraining|Erdős–Rényi\nTest|Erdős–Rényi, Newman–Watts–Strogatz, Barabási–Albert, Dual Barabási–Albert, Powerlaw Cluster, Stochastic Block Model" tabindex="0" role="button" aria-label="Show details" style="--tip-accent: var(--ds-g3);">3</strong> difficulties, with different distribution shifts.</p>`
-    : `<p>Placeholder overview text about ${r.name}. Describe the domain, data sources, typical prediction targets, and important structural properties of the graphs. Mention how nodes and edges are defined and how the connectivity captures meaningful relationships.</p>
-       <p>Explain, at a high level, how graphs are constructed, why the chosen regimes apply here, and what makes this dataset challenging such as scale, sparsity, or long-range dependencies.</p>`
+      : `<p>Placeholder overview text about <strong class="accent-num" style="color: var(--accent);">${r.name}</strong>. Describe what the dataset looks like, how it has been obtained/created and what you are doing with it. For reference, you can take a look at the <a class="accent-link" href="#ds-ar">Algorithmic Reasoning</a> and <a class="accent-link" href="#ds-weather">Weather Forecasting</a> section.</p>
+        <p>Try to keep your description short and concise, focusing on a high-level outline of what we're working with. More information about certain aspects can be displayed like <strong class="accent-num tip-link tip-enhanced" data-vars="More information can be displayed here." tabindex="0" role="button" aria-label="Show more information" style="--tip-accent: var(--accent);">this</strong>.</p>`
 
   const graphsVal = r.id === 'weather' ? '93.544' : (r.id === 'ar' ? '21M' : '90k')
   const nodesVal = r.id === 'weather' ? '4610' : (r.id === 'ar' ? '16–2048' : '16–256')
@@ -507,7 +507,7 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
          border-radius: 50px;
          padding: 0.8rem 1.2rem 0.8rem 1.5rem;
          box-shadow: var(--shadow-2);
-         z-index: 50;
+         z-index: 150;
          font-size: 0.9rem;
          line-height: 1.4;
          width: 320px;
