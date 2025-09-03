@@ -1,4 +1,4 @@
-import{r as a,e as s}from"./layout-dJMx-EO5.js";const e=document.querySelector("#app");e.innerHTML=a("quickstart",`
+import{r as a,e as s}from"./layout-CPdvT_wk.js";const e=document.querySelector("#app");e.innerHTML=a("quickstart",`
   <section class="page-header tight">
     <div class="container">
       <div class="title-row">
@@ -139,6 +139,18 @@ results = graphbench.evaluator(dataset_name, opt_model, dataset['valid'], datase
 <span class="var">opt_model</span> = graphbench.<span class="fn">optimize</span>(<span class="var">model</span>, <span class="var">dataset</span>[<span class="str">'train'</span>])
 <span class="var">results</span> = graphbench.<span class="fn">evaluator</span>(<span class="var">dataset_name</span>, <span class="var">opt_model</span>, <span class="var">dataset</span>[<span class="str">'valid'</span>], <span class="var">dataset</span>[<span class="str">'test'</span>])</code></pre>
                 </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Builder CTA -->
+          <li class="step">
+            <div class="num">→</div>
+            <div class="body">
+              <h3>Assemble your custom GraphCast code</h3>
+              <p>Use our interactive builder to configure datasets and generate your full GraphCast script.</p>
+              <div style="text-align:center; margin:.6rem 0 0;">
+                <a class="btn btn-primary" href="./index.html#builder" title="Open the code builder" style="border:none; color:#fff;">Let's Go!</a>
               </div>
             </div>
           </li>
