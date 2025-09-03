@@ -518,9 +518,9 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
       er: { train: 270, test: 360 },
       nws: { train: 230, test: 360 },
       ba: { train: 220, test: TEST_DIST },
-      dba: { train: TRAIN_DIST, test: 1000 },
-      plc: { train: 240, test: 1000 },
-      sbm: { train: 260, test: 600 },
+      dba: { train: 300, test: 1000 },
+      plc: { train: 300, test: 1000 },
+      sbm: { train: 280, test: 600 },
     },
     max_spanning_tree: {
       er: { train: 230, test: 400 },
