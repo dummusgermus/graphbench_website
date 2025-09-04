@@ -118,7 +118,7 @@ import{r as D,e as F}from"./layout-h1GuVTDa.js";const R=document.querySelector("
       <div class="builder-grid">
         <aside class="builder-sidebar" aria-label="Configuration">
           <div class="side">
-            <div class="side-head"><h3>Set up your custom GraphCast code.</h3></div>
+            <div class="side-head"><h3>Set up your custom GraphBench code.</h3></div>
             <div class="side-body" id="config-panel"></div>
           </div>
         </aside>
