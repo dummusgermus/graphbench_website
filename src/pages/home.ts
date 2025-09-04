@@ -606,7 +606,12 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       out = out.replace(/\b(loader|optimize|evaluator)\b/g, '<span class="fn">$1</span>')
       out = out.replace(/\b(model|dataset_name|datasets|dataset|opt_model|opt_models|results|name)\b/g, '<span class="var">$1</span>')
       out = out.replace(/'([^']*)'/g, "<span class=\"str\">'$1'</span>")
-      out = out.replace(/#([^\n]*)/g, '<span class="com">#$1</span>')
+      // Ensure anything inside a comment is styled as a comment (strip nested spans)
+      out = out.replace(/#([^\n]*)/g, (_m, p1) => {
+        const cleaned = String(p1).replace(/<[^>]+>/g, '')
+        return '<span class="com">#' + cleaned + '</span>'
+      })
+      out = out.replace(/<span class=\"com\">#([^<]*)\bgraphbench\b([^<]*)<\/span>/g, '<span class="com">#$1</span><span class="ns">graphbench</span><span class="com">$2</span>')
       return out
     }
 
