@@ -1,4 +1,4 @@
-import{r,g as c}from"./layout-h75ZV23d.js";const p=document.querySelector("#app");p.innerHTML=r("updates",`
+import{r,g as c}from"./layout-Boc4OT-_.js";const p=document.querySelector("#app");p.innerHTML=r("updates",`
   <section class="page-header">
     <div class="container">
       <div class="title-row">
