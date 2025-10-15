@@ -1,4 +1,4 @@
-import{r as D,e as F}from"./layout-h1GuVTDa.js";const R=document.querySelector("#app");R.innerHTML=D("home",`
+import{r as D,e as F}from"./layout-CMBKSRRE.js";const R=document.querySelector("#app");R.innerHTML=D("home",`
   <!-- Slide 1: Hero -->
   <section class="snap-section hero hero-primary">
     <div class="container hero-grid">
@@ -64,16 +64,16 @@ import{r as D,e as F}from"./layout-h1GuVTDa.js";const R=document.querySelector("
 
         <div class="flow-col flow-right">
           <div class="flow-item ev1" style="--accent:#4F064F"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./evaluation.html" class="flow-node eval ev1" data-ev="splits"><span class="label">Evaluation Splits</span></a>
+            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev1" data-ev="splits"><span class="label">Evaluation Splits</span></a>
           </div>
           <div class="flow-item ev2" style="--accent:#821846"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./evaluation.html" class="flow-node eval ev2" data-ev="metrics"><span class="label">Evaluation Metrics</span></a>
+            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev2" data-ev="metrics"><span class="label">Evaluation Metrics</span></a>
           </div>
           <div class="flow-item ev3" style="--accent:#9E2235"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./evaluation.html" class="flow-node eval ev3" data-ev="tuning"><span class="label">Hyperparameter Tuning</span></a>
+            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev3" data-ev="tuning"><span class="label">Hyperparameter Tuning</span></a>
           </div>
           <div class="flow-item ev4" style="--accent:#AF3323"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./evaluation.html" class="flow-node eval ev4" data-ev="ood"><span class="label">OOD Generalization</span></a>
+            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev4" data-ev="ood"><span class="label">OOD Generalization</span></a>
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@ import{r as D,e as F}from"./layout-h1GuVTDa.js";const R=document.querySelector("
         <div class="col-4">
           <h3>Evaluation</h3>
           <p>GraphBench provides extensive evaluation of your model, covering splits, metrics, hyperparameter tuning, and OOD generalization.</p>
-          <div class="flow-cta"><a class="btn btn-outline" href="./evaluation.html">Learn more</a></div>
+          <div class="flow-cta"><a class="btn btn-outline" href="https://arxiv.org/" target="_blank" rel="noopener noreferrer">Learn more</a></div>
         </div>
       </div>
 
