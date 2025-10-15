@@ -11,7 +11,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       <nav class="nav-links">
         <a href="./quickstart.html">Get Started</a>
         <a href="./datasets.html">Datasets</a>
-        <a href="./evaluation.html">Evaluation</a>
         <a href="./links.html">Links</a>
         <a href="./updates.html">Updates</a>
         <a href="./team.html">Team</a>

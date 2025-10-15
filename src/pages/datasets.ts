@@ -57,7 +57,7 @@ const dsUnifiedRows = (rows: Ds[], group: number, label: string) => {
       const cls = x === 'Generation' ? 'tag-gen' : (x === 'Node-level') ? 'tag-node' : ((x === 'Edge-level' || x === 'edge-level') ? 'tag-edge' : 'tag-graph')
       return `<span class=\"chip-sm ${cls}\">${x}</span>`
     }).join(' ')
-    const graphs = r.id === 'weather' ? '93.544' : (r.id === 'ar' ? '21M' : '90k')
+    const graphs = r.id === 'weather' ? '93,544' : (r.id === 'ar' ? '21M' : '90k')
     const nodes = r.id === 'weather' ? '4610' : (r.id === 'ar' ? '16–2048' : '16–256')
     const edges = r.id === 'weather' ? '7928' : (r.id === 'ar' ? '15–7319' : '16–2556')
     const size = r.id === 'weather' ? '60.6GB' : (r.id === 'ar' ? '85GB' : '1.2GB')
@@ -107,7 +107,7 @@ const dsSlide = (r: Ds, idx: number, total: number): string => {
       : `<p>Placeholder overview text about <strong class="accent-num" style="color: var(--accent);">${r.name}</strong>. Describe what the dataset looks like, how it has been obtained/created and what you are doing with it. For reference, you can take a look at the <a class="accent-link" href="#ds-ar">Algorithmic Reasoning</a> and <a class="accent-link" href="#ds-weather">Weather Forecasting</a> section.</p>
         <p>Try to keep your description short and concise, focusing on a high-level outline of what we're working with. More information about certain aspects can be displayed like <strong class="accent-num tip-link tip-enhanced" data-vars="More information can be displayed here." tabindex="0" role="button" aria-label="Show more information" style="--tip-accent: var(--accent);">this</strong>.</p>`
 
-  const graphsVal = r.id === 'weather' ? '93.544' : (r.id === 'ar' ? '21M' : '90k')
+  const graphsVal = r.id === 'weather' ? '93,544' : (r.id === 'ar' ? '21M' : '90k')
   const nodesVal = r.id === 'weather' ? '4610' : (r.id === 'ar' ? '16–2048' : '16–256')
   const edgesVal = r.id === 'weather' ? '7928' : (r.id === 'ar' ? '15–7319' : '16–2556')
   const sizeVal = r.id === 'weather' ? '60.6GB' : (r.id === 'ar' ? '85GB' : '1.2GB')

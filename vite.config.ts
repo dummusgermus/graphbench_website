@@ -11,7 +11,6 @@ export default defineConfig(() => {
           main: resolve(__dirname, 'index.html'),
           datasets: resolve(__dirname, 'datasets.html'),
           quickstart: resolve(__dirname, 'quickstart.html'),
-          evaluation: resolve(__dirname, 'evaluation.html'),
           team: resolve(__dirname, 'team.html'),
           updates: resolve(__dirname, 'updates.html'),
         },

@@ -69,16 +69,16 @@ app.innerHTML = renderLayout('home', `
 
         <div class="flow-col flow-right">
           <div class="flow-item ev1" style="--accent:#4F064F"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./evaluation.html" class="flow-node eval ev1" data-ev="splits"><span class="label">Evaluation Splits</span></a>
+            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev1" data-ev="splits"><span class="label">Evaluation Splits</span></a>
           </div>
           <div class="flow-item ev2" style="--accent:#821846"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./evaluation.html" class="flow-node eval ev2" data-ev="metrics"><span class="label">Evaluation Metrics</span></a>
+            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev2" data-ev="metrics"><span class="label">Evaluation Metrics</span></a>
           </div>
           <div class="flow-item ev3" style="--accent:#9E2235"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./evaluation.html" class="flow-node eval ev3" data-ev="tuning"><span class="label">Hyperparameter Tuning</span></a>
+            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev3" data-ev="tuning"><span class="label">Hyperparameter Tuning</span></a>
           </div>
           <div class="flow-item ev4" style="--accent:#AF3323"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./evaluation.html" class="flow-node eval ev4" data-ev="ood"><span class="label">OOD Generalization</span></a>
+            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev4" data-ev="ood"><span class="label">OOD Generalization</span></a>
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@ app.innerHTML = renderLayout('home', `
         <div class="col-4">
           <h3>Evaluation</h3>
           <p>GraphBench provides extensive evaluation of your model, covering splits, metrics, hyperparameter tuning, and OOD generalization.</p>
-          <div class="flow-cta"><a class="btn btn-outline" href="./evaluation.html">Learn more</a></div>
+          <div class="flow-cta"><a class="btn btn-outline" href="https://arxiv.org/" target="_blank" rel="noopener noreferrer">Learn more</a></div>
         </div>
       </div>
 
@@ -123,7 +123,7 @@ app.innerHTML = renderLayout('home', `
       <div class="builder-grid">
         <aside class="builder-sidebar" aria-label="Configuration">
           <div class="side">
-            <div class="side-head"><h3>Set up your custom GraphCast code.</h3></div>
+            <div class="side-head"><h3>Set up your custom GraphBench code.</h3></div>
             <div class="side-body" id="config-panel"></div>
           </div>
         </aside>
