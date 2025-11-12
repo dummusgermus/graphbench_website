@@ -1,4 +1,4 @@
-import{r as D,e as F}from"./layout-CMBKSRRE.js";const R=document.querySelector("#app");R.innerHTML=D("home",`
+import{r as D,e as F}from"./layout-CgwmG731.js";const R=document.querySelector("#app");R.innerHTML=D("home",`
   <!-- Slide 1: Hero -->
   <section class="snap-section hero hero-primary">
     <div class="container hero-grid">
@@ -11,7 +11,7 @@ import{r as D,e as F}from"./layout-CMBKSRRE.js";const R=document.querySelector("
           <a href="./datasets.html" class="btn btn-outline">Explore Datasets</a>
         </div>
       </div>
-      <div class="hero-right" aria-hidden="true">
+      <div class="hero-right" aria-hidden="true",z-index: -1000;>
         <img src="./Graphland.svg" alt="Graph network visualization" class="hero-graphland" />
       </div>
       <div class="arrow-background"></div>

@@ -1,4 +1,4 @@
-import{r as e,g as n}from"./layout-CMBKSRRE.js";const t=document.querySelector("#app");t.innerHTML=e("team",`
+import{r as e,g as n,e as t}from"./layout-CgwmG731.js";const a=document.querySelector("#app");a.innerHTML=e("team",`
   <section class="page-header">
     <div class="container">
       <div class="title-row">
@@ -25,4 +25,4 @@ import{r as e,g as n}from"./layout-CMBKSRRE.js";const t=document.querySelector("
       `).join("")}
     </div>
   </section>
-`);
+`);t();

@@ -1,4 +1,4 @@
-import{r,g as c}from"./layout-CMBKSRRE.js";const p=document.querySelector("#app");p.innerHTML=r("updates",`
+import{r,g as c,e as p}from"./layout-CgwmG731.js";const l=document.querySelector("#app");l.innerHTML=r("updates",`
   <section class="page-header">
     <div class="container">
       <div class="title-row">
@@ -18,4 +18,4 @@ import{r,g as c}from"./layout-CMBKSRRE.js";const p=document.querySelector("#app"
           <h3 class="update-title"><span class="date">${t.date}</span><span class="version-tag ${d}" aria-label="Version">${t.version}</span></h3>
         </div>
         <div class="update-body">${t.text}</div>
-      </div>`}).join("");e.innerHTML=o}catch{}})();
+      </div>`}).join("");e.innerHTML=o}catch{}})();p();
