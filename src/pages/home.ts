@@ -16,7 +16,7 @@ app.innerHTML = renderLayout('home', `
           <a href="./datasets.html" class="btn btn-outline">Explore Datasets</a>
         </div>
       </div>
-      <div class="hero-right" aria-hidden="true">
+      <div class="hero-right" aria-hidden="true",z-index: -1000;>
         <img src="./Graphland.svg" alt="Graph network visualization" class="hero-graphland" />
       </div>
       <div class="arrow-background"></div>

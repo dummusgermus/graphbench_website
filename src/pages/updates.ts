@@ -1,5 +1,5 @@
 import '../style.css'
-import { renderLayout, getRuntimeBase } from '../shared/layout'
+import { renderLayout, getRuntimeBase, enhanceInteractions } from '../shared/layout'
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 app.innerHTML = renderLayout('updates', `
@@ -43,4 +43,6 @@ type UpdateItem = { date: string; version: string; text: string }
     } catch { }
   })()
 
+
+enhanceInteractions()
 

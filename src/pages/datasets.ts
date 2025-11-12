@@ -1,6 +1,6 @@
 import '../style.css'
 import { initWeatherGlobe } from '../features/weather/globe'
-import { renderLayout } from '../shared/layout'
+import { renderLayout, enhanceInteractions } from '../shared/layout'
 import { initArGraphVisualizer } from '../features/ar/visualizer'
 
 type Ds = { id: string; name: string; group: number; regimes: string[] }
@@ -300,6 +300,8 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
     target.scrollIntoView({ behavior: 'smooth', block: 'start' })
   })
 })()
+
+enhanceInteractions()
 
 
 // Initialize weather globe on its slide after DOM is ready

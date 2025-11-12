@@ -1,5 +1,5 @@
 import '../style.css'
-import { renderLayout, getRuntimeBase } from '../shared/layout'
+import { renderLayout, getRuntimeBase, enhanceInteractions } from '../shared/layout'
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 app.innerHTML = renderLayout('team', `
@@ -51,5 +51,4 @@ app.innerHTML = renderLayout('team', `
   </section>
 `)
 
-
-
+enhanceInteractions()
