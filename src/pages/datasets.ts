@@ -14,6 +14,16 @@ const items: Ds[] = [
   { id: 'weather', name: 'Weather Forecasting', group: 4, regimes: ['Node-level'] },
 ]
 
+const dsStats: Record<string, { graphs: string; nodes: string; edges: string; size: string }> = {
+  social: { graphs: '3', nodes: '286K – 580K', edges: '3M – 17M', size: '' },
+  chip: { graphs: '1.2M', nodes: '– 335', edges: '', size: '' },
+  circuits: { graphs: '93,000', nodes: '13 – 24', edges: '30 – 56', size: '' },
+  sat: { graphs: '208,788', nodes: '', edges: '', size: '' },
+  co: { graphs: '300,000', nodes: '200 – 1,200', edges: '', size: '' },
+  ar: { graphs: '21M', nodes: '16 – 512', edges: '15 – 7,319', size: '85GB' },
+  weather: { graphs: '93,544', nodes: '4,610', edges: '7,928', size: '60.6GB' },
+}
+
 const dsIcon = (id: string): string => {
   switch (id) {
     case 'social':
@@ -57,10 +67,11 @@ const dsUnifiedRows = (rows: Ds[], group: number, label: string) => {
       const cls = x === 'Generation' ? 'tag-gen' : (x === 'Node-level') ? 'tag-node' : ((x === 'Edge-level' || x === 'edge-level') ? 'tag-edge' : 'tag-graph')
       return `<span class=\"chip-sm ${cls}\">${x}</span>`
     }).join(' ')
-    const graphs = r.id === 'weather' ? '93,544' : (r.id === 'ar' ? '21M' : '90k')
-    const nodes = r.id === 'weather' ? '4610' : (r.id === 'ar' ? '16–2048' : '16–256')
-    const edges = r.id === 'weather' ? '7928' : (r.id === 'ar' ? '15–7319' : '16–2556')
-    const size = r.id === 'weather' ? '60.6GB' : (r.id === 'ar' ? '85GB' : '1.2GB')
+    const stats = dsStats[r.id] || { graphs: '', nodes: '', edges: '', size: '' }
+    const graphs = stats.graphs ?? ''
+    const nodes = stats.nodes ?? ''
+    const edges = stats.edges ?? ''
+    const size = stats.size ?? ''
     return `
     <tr class=\"${rowCls}\"> 
       <td class="accent-cell"></td>
@@ -101,16 +112,34 @@ const dsSlide = (r: Ds, idx: number, total: number): string => {
   const proseHtml = r.id === 'weather'
     ? `<p>We use reanalysis data from the <a class="accent-link" href="https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels" target="_blank" rel="noopener">ERA5</a> dataset, preprocessed via the <a class="accent-link" href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023MS004019" target="_blank" rel="noopener">WeatherBench2</a> pipeline. Our dataset consists of a down-sampled version containing a <strong class="accent-num">64 × 32</strong> equiangular grid, mapped onto an icosahedron spanning the globe.</p>
        <p>Each datapoint contains <strong class="accent-num tip-link tip-enhanced" data-vars="Surface variables:\n2-m temperature (2T)\n10-m u wind component (10U)\n10-m v wind component (10V)\nMean sea level pressure (MSL)\nTotal precipitation (TP)\n\nAtmospheric variables:\nTemperature (T)\nU component of wind (U)\nV component of wind (V)\nGeopotential (Z)\nSpecific humidity (Q)\nVertical wind speed (W)" tabindex="0" role="button" aria-label="Show variables" style="--tip-accent: var(--ds-g4);">11</strong> different variables defined across <strong class="accent-num tip-link tip-enhanced" data-vars="50 hPa\n100 hPa\n150 hPa\n200 hPa\n250 hPa\n300 hPa\n400 hPa\n500 hPa\n600 hPa\n700 hPa\n850 hPa\n925 hPa\n1,000 hPa" tabindex="0" role="button" aria-label="Show pressure levels" style="--tip-accent: var(--ds-g4);">13</strong> pressure levels. Via message passing on the icosahedron, we determine the <strong class="accent-num">12h</strong> residual change in the atmospheric variables.</p>`
+    : r.id === 'sat'
+      ? `<p>Our data spans <strong class="accent-num tip-link tip-enhanced" data-vars="<span style=&quot;color: var(--tip-accent);&quot;><strong>Kissat</strong></span> (Biere et al., 2023, 2024)\n<span style=&quot;color: var(--tip-accent);&quot;><strong>CaDiCaL</strong></span> (Biere et al., 2024)\n<span style=&quot;color: var(--tip-accent);&quot;><strong>Gimsatul</strong></span> (Biere et al., 2024)\n<span style=&quot;color: var(--tip-accent);&quot;><strong>IsaSAT</strong></span> (Biere et al., 2024)\n<span style=&quot;color: var(--tip-accent);&quot;><strong>Tabularasat</strong></span> (Biere et al., 2023)\n<span style=&quot;color: var(--tip-accent);&quot;><strong>BreakID-Kissat</strong></span> (Bogaerts et al., 2023, 2024)\n<span style=&quot;color: var(--tip-accent);&quot;><strong>SBVA-Kissat</strong></span> (Haberlandt &amp; Green, 2023)\n<span style=&quot;color: var(--tip-accent);&quot;><strong>SBVA-CaDiCaL</strong></span> (Haberlandt &amp; Green, 2023)\n<span style=&quot;color: var(--tip-accent);&quot;><strong>Kissat MAB Prop</strong></span> (Gao, 2023)\n<span style=&quot;color: var(--tip-accent);&quot;><strong>ESA Solvers</strong></span> (Li et al., 2024b)\n<span style=&quot;color: var(--tip-accent);&quot;><strong>AMSAT</strong></span> (Li et al., 2024b)" tabindex="0" role="button" aria-label="Show solver details" style="--tip-accent: var(--ds-g3);">11</strong> solvers and over <strong class="accent-num" style="--tip-accent: var(--ds-g3);">100K</strong> problem instances. Each instance is represented through <strong class="accent-num tip-link tip-enhanced" data-vars="Variable Graph\nVariable–Clause Graph\nLiteral–Clause Graph" tabindex="0" role="button" aria-label="Show graph encodings" style="--tip-accent: var(--ds-g3);">3</strong> graph encodings, capturing complementary structural views of SAT formulae.</p>
+        <p>The dataset covers <strong class="accent-num tip-link tip-enhanced" data-vars="SMALL\nMEDIUM\nLARGE" tabindex="0" role="button" aria-label="Show scale tiers" style="--tip-accent: var(--ds-g3);">3</strong> scales from a few thousand to over <strong class="accent-num" style="--tip-accent: var(--ds-g3);">25M</strong> variables and <strong class="accent-num" style="--tip-accent: var(--ds-g3);">1.8B</strong> clauses, enabling evaluation under increasing computational hardness and assessing generalization across problem sizes.</p>`
+    : r.id === 'social'
+      ? `<p>We model user interactions on <a class="accent-link" href="https://bsky.app/" target="_blank" rel="noopener">Bluesky</a> as dynamic, directed graphs to predict future engagement on posts.</p>
+        <p>Nodes represent users and edges capture <strong class="accent-num tip-link tip-enhanced" data-vars="Quotes\nReplies\nReposts" tabindex="0" role="button" aria-label="Show interaction types" style="--tip-accent: var(--ds-g1);">3</strong> interaction types, with temporal evolution reflecting shifting social behavior. Given past interactions and text embeddings, we predict a user’s expected engagement count in the next time window.</p>`
+    : r.id === 'circuits'
+      ? `<p>We model analog circuit topology design, where nodes encode electronic components and edges their electrical connections.</p>
+        <p>Each graph corresponds to a real circuit, with the goal of predicting <strong class="accent-num tip-link tip-enhanced" data-vars="Voltage Conversion Ratio\nPower Conversion Efficiency" tabindex="0" role="button" aria-label="Show performance metrics" style="--tip-accent: var(--ds-g2);">2</strong> continuous performance metrics from the graph structure.</p>
+        <p>We provide <strong class="accent-num tip-link tip-enhanced" data-vars="<span><strong style=&quot;color: var(--tip-accent); font-weight: 700;&quot;>5</strong>-component circuits</span>\n<span><strong style=&quot;color: var(--tip-accent); font-weight: 700;&quot;>7</strong>-component circuits</span>\n<span><strong style=&quot;color: var(--tip-accent); font-weight: 700;&quot;>10</strong>-component circuits</span>" tabindex="0" role="button" aria-label="Show dataset variants" style="--tip-accent: var(--ds-g2);">3</strong> datasets, allowing evaluation of structural generalization and transfer across circuit sizes. Circuits are sourced from a procedural generator following analog design rules.</p>`
+    : r.id === 'chip'
+      ? `<p>We focus on learning to generate small Boolean circuits. Each circuit is modeled as an and-inverter graph (<strong class="accent-num" style="--tip-accent: var(--ds-g2);">AIG</strong>) of logic gates, where nodes denote gates and edges represent signal connections.</p>
+        <p>Given a set of Boolean functions, the model must learn to produce functionally equivalent, optimized circuits, targeting reductions in area, power, and delay.</p>`
+    : r.id === 'co'
+      ? `<p>We synthetically generate optimization problems across <strong class="accent-num tip-link tip-enhanced" data-vars="Erdős–Rényi\nBarabási–Albert\nRandom Regular" tabindex="0" role="button" aria-label="Show random graph families" style="--tip-accent: var(--ds-g3);">3</strong> random graph families — each available in <strong class="accent-num tip-link tip-enhanced" data-vars="SMALL\nLARGE" tabindex="0" role="button" aria-label="Show configurations" style="--tip-accent: var(--ds-g3);">2</strong> configurations.</p>
+        <p>Every instance encodes one of <strong class="accent-num tip-link tip-enhanced" data-vars="Maximum Independent Set\nMaximum Cut\nGraph Coloring" tabindex="0" role="button" aria-label="Show NP-hard problems" style="--tip-accent: var(--ds-g3);">3</strong> NP-hard problems with ground-truth solutions computed via exact solvers.</p>
+        <p>Models must learn to predict optimal solution costs or approximate combinatorial objectives, testing both supervised and unsupervised regimes.</p>`
     : r.id === 'ar'
-      ? `<p>We synthetically generate unique graphs by sampling from <strong class="accent-num tip-link tip-enhanced" data-vars="Erdős–Rényi \nNewman–Watts–Strogatz \nBarabási–Albert \nDual Barabási–Albert \nPowerlaw Cluster \nStochastic Block Model" tabindex="0" role="button" aria-label="Show details" style="--tip-accent: var(--ds-g3);">6</strong> different generators. We then apply <strong class="accent-num tip-link tip-enhanced" data-vars="Maximum Clique\nShortest Path\nMaximum Spanning Tree\nSteiner Tree\nMaximum Flow\nBipartite Matching\nBridge Finding" tabindex="0" role="button" aria-label="Show details" style="--tip-accent: var(--ds-g3);">7</strong> algorithmic reasoning tasks to these graphs, ensuring interesting results by choosing unique parameters for each combination. You can take a look at the resulting structures on the right.</p>
+      ? `<p>We synthetically generate unique graphs by sampling from <strong class="accent-num tip-link tip-enhanced" data-vars="Erdős–Rényi \nNewman–Watts–Strogatz \nBarabási–Albert \nDual Barabási–Albert \nPowerlaw Cluster \nStochastic Block Model" tabindex="0" role="button" aria-label="Show details" style="--tip-accent: var(--ds-g3);">6</strong> different generators. We then apply <strong class="accent-num tip-link tip-enhanced" data-vars="Maximum Clique\nTopological Sort\nMaximum Spanning Tree\nSteiner Tree\nMaximum Flow\nBipartite Matching\nBridge Finding" tabindex="0" role="button" aria-label="Show details" style="--tip-accent: var(--ds-g3);">7</strong> algorithmic reasoning tasks to these graphs, ensuring interesting results by choosing unique parameters for each combination. You can take a look at the resulting structures on the right.</p>
        <p>We use graphs of size <strong class="accent-num" style="--tip-accent: var(--ds-g3);">16</strong> for training, <strong class="accent-num" style="--tip-accent: var(--ds-g3);">128</strong> for testing and up to <strong class="accent-num" style="--tip-accent: var(--ds-g3);">2048</strong> for size generalization, offering datasets in <strong class="accent-num tip-link tip-enhanced" data-vars="Easy:\nTraining|Erdős–Rényi, Newman–Watts–Strogatz, Barabási–Albert, Dual Barabási–Albert, Powerlaw Cluster, Stochastic Block Model\nTest|Erdős–Rényi, Newman–Watts–Strogatz, Barabási–Albert, Dual Barabási–Albert, Powerlaw Cluster, Stochastic Block Model\n\nMedium:\nTraining|Erdős–Rényi, Barabási–Albert, Stochastic Block Model \nTest|Erdős–Rényi, Newman–Watts–Strogatz, Barabási–Albert, Dual Barabási–Albert, Powerlaw Cluster, Stochastic Block Model\n\nHard:\nTraining|Erdős–Rényi\nTest|Erdős–Rényi, Newman–Watts–Strogatz, Barabási–Albert, Dual Barabási–Albert, Powerlaw Cluster, Stochastic Block Model" tabindex="0" role="button" aria-label="Show details" style="--tip-accent: var(--ds-g3);">3</strong> difficulties, with different distribution shifts.</p>`
       : `<p>Placeholder overview text about <strong class="accent-num" style="color: var(--accent);">${r.name}</strong>. Describe what the dataset looks like, how it has been obtained/created and what you are doing with it. For reference, you can take a look at the <a class="accent-link" href="#ds-ar">Algorithmic Reasoning</a> and <a class="accent-link" href="#ds-weather">Weather Forecasting</a> section.</p>
         <p>Try to keep your description short and concise, focusing on a high-level outline of what we're working with. More information about certain aspects can be displayed like <strong class="accent-num tip-link tip-enhanced" data-vars="More information can be displayed here." tabindex="0" role="button" aria-label="Show more information" style="--tip-accent: var(--accent);">this</strong>.</p>`
 
-  const graphsVal = r.id === 'weather' ? '93,544' : (r.id === 'ar' ? '21M' : '90k')
-  const nodesVal = r.id === 'weather' ? '4610' : (r.id === 'ar' ? '16–2048' : '16–256')
-  const edgesVal = r.id === 'weather' ? '7928' : (r.id === 'ar' ? '15–7319' : '16–2556')
-  const sizeVal = r.id === 'weather' ? '60.6GB' : (r.id === 'ar' ? '85GB' : '1.2GB')
+  const slideStats = dsStats[r.id] || { graphs: '', nodes: '', edges: '', size: '' }
+  const graphsVal = slideStats.graphs ?? ''
+  const nodesVal = slideStats.nodes ?? ''
+  const edgesVal = slideStats.edges ?? ''
+  const sizeVal = slideStats.size ?? ''
 
   return `
   <section class="snap-section ds-slide section-white ds-accent ${accentClass}${r.id === 'ar' ? ' ds-ar-stretch' : ''}" id="ds-${r.id}" style="background:#fff;">
@@ -338,7 +367,7 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       const mkSec = (title: string, items: string[]) => {
         const h = document.createElement('div'); h.className = 'tip-h'; h.textContent = title
         const ul = document.createElement('ul'); ul.className = 'tip-ul'
-        items.forEach(t => { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li) })
+        items.forEach(t => { const li = document.createElement('li'); li.innerHTML = t; ul.appendChild(li) })
         fly!.appendChild(h); fly!.appendChild(ul)
       }
       const surf = data.slice(1, Math.max(1, splitAt)).filter(Boolean)
@@ -397,7 +426,7 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
           body.style.flex = '1'
           body.className = 'tip-col-body'
           const ul = document.createElement('ul'); ul.className = 'tip-ul'; ul.style.margin = '0'
-          items.forEach(t => { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li) })
+          items.forEach(t => { const li = document.createElement('li'); li.innerHTML = t; ul.appendChild(li) })
           body.appendChild(ul)
           col.appendChild(lab); col.appendChild(body)
           return col
@@ -419,7 +448,7 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       })
     } else if (itemsOnly.length) {
       const ul = document.createElement('ul'); ul.className = 'tip-ul'
-      itemsOnly.forEach(t => { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li) })
+      itemsOnly.forEach(t => { const li = document.createElement('li'); li.innerHTML = t; ul.appendChild(li) })
       fly!.appendChild(ul)
     }
     return fly

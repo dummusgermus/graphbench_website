@@ -8,7 +8,7 @@ type Edge = [number, number]
 type Graph = { numNodes: number; edges: Edge[] }
 
 type DistributionId = 'er' | 'nws' | 'ba' | 'dba' | 'plc' | 'sbm'
-type ProblemId = 'max_clique' | 'shortest_path' | 'max_spanning_tree' | 'steiner_tree' | 'max_flow' | 'bipartite_matching' | 'bridge_finding'
+type ProblemId = 'max_clique' | 'topological_sort' | 'max_spanning_tree' | 'steiner_tree' | 'max_flow' | 'bipartite_matching' | 'bridge_finding'
 
 type SizeId = 'train' | 'test'
 
@@ -26,7 +26,7 @@ const DISTRIBUTIONS: DistDef[] = [
 
 const PROBLEMS: ProblemDef[] = [
   { id: 'max_clique', label: 'Maximum Clique' },
-  { id: 'shortest_path', label: 'Shortest Path' },
+  { id: 'topological_sort', label: 'Topological Sort' },
   { id: 'max_spanning_tree', label: 'Maximum Spanning Tree' },
   { id: 'steiner_tree', label: 'Steiner Tree' },
   { id: 'max_flow', label: 'Maximum Flow' },
@@ -52,13 +52,13 @@ const PARAMS: ParamMap = {
     plc: { m: 9, p: 0.5 },
     sbm: { blocks: 2, pIn: 0.75, pOut: 0.75 },
   },
-  shortest_path: {
-    er: { p: 0.17 },
-    nws: { k: 2, p: 0.15 },
-    ba: { m: 2 },
-    dba: { m1: 2, m2: 1, p: 0.05 },
-    plc: { m: 1, p: 0.35 },
-    sbm: { blocks: 2, pIn: 0.31, pOut: 0.01 },
+  topological_sort: {
+    er: { p: 0.3 },
+    nws: { k: 2, p: 0.2 },
+    ba: { m: 4 },
+    dba: { m1: 3, m2: 2, p: 0.5 },
+    plc: { m: 3, p: 0.1 },
+    sbm: { blocks: 2, pIn: 0.5, pOut: 0.2 },
   },
   max_spanning_tree: {
     er: { p: 0.19 },
@@ -479,7 +479,7 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
     'ar-prob',
     'Problem',
     PROBLEMS.map(p => ({ value: p.id, label: p.label })),
-    'shortest_path'
+    'topological_sort'
   )
   controls.appendChild(distDD.wrap)
   controls.appendChild(sizeDD.wrap)
@@ -514,7 +514,7 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
       plc: { train: 150, test: 450 },
       sbm: { train: 150, test: 400 },
     },
-    shortest_path: {
+    topological_sort: {
       er: { train: 270, test: 360 },
       nws: { train: 230, test: 360 },
       ba: { train: 220, test: TEST_DIST },

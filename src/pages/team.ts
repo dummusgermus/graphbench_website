@@ -1,5 +1,5 @@
 import '../style.css'
-import { renderLayout } from '../shared/layout'
+import { renderLayout, getRuntimeBase } from '../shared/layout'
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 app.innerHTML = renderLayout('team', `
@@ -40,7 +40,7 @@ app.innerHTML = renderLayout('team', `
       ].map(member => `
       <div class="team-item">
         <div class="team-avatar">
-          <img src="/images/team/${member.image}" alt="${member.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+          <img src="${getRuntimeBase()}images/team/${member.image}" alt="${member.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><circle cx="12" cy="8" r="4"/><path d="M6 20a6 6 0 0 1 12 0"/></svg>
         </div>
         <div class="team-name">${member.name}</div>
