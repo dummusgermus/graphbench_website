@@ -608,6 +608,13 @@ section .section-accent h2::after { content: ""; position: absolute; left: 0; bo
 .tag-edge { background: color-mix(in oklab, #f59e0b 14%, white); border-color: color-mix(in oklab, #f59e0b 35%, transparent); color: color-mix(in oklab, #f59e0b 70%, black); }
 .tag-graph { background: color-mix(in oklab, #6366f1 14%, white); border-color: color-mix(in oklab, #6366f1 35%, transparent); color: color-mix(in oklab, #6366f1 70%, black); }
 
+/* Dataset domain tag accents */
+.tag-g1 { background: color-mix(in oklab, var(--ds-g1) 14%, white); border-color: color-mix(in oklab, var(--ds-g1) 35%, transparent); color: color-mix(in oklab, var(--ds-g1) 70%, black); }
+.tag-g2 { background: color-mix(in oklab, var(--ds-g2) 14%, white); border-color: color-mix(in oklab, var(--ds-g2) 35%, transparent); color: color-mix(in oklab, var(--ds-g2) 70%, black); }
+.tag-g3 { background: color-mix(in oklab, var(--ds-g3) 14%, white); border-color: color-mix(in oklab, var(--ds-g3) 35%, transparent); color: color-mix(in oklab, var(--ds-g3) 70%, black); }
+.tag-g4 { background: color-mix(in oklab, var(--ds-g4) 14%, white); border-color: color-mix(in oklab, var(--ds-g4) 35%, transparent); color: color-mix(in oklab, var(--ds-g4) 70%, black); }
+.tag-senior { background: color-mix(in oklab, #d97706 14%, white); border-color: color-mix(in oklab, #d97706 35%, transparent); color: color-mix(in oklab, #d97706 70%, black); }
+
 /* Cards grid */
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(12, minmax(0, 1fr)); }
 .col-4 { grid-column: span 12; }
@@ -631,7 +638,15 @@ section .section-accent h2::after { content: ""; position: absolute; left: 0; bo
 .team-avatar svg { width: 36px; height: 36px; display: block; }
 .team-item:hover .team-avatar { box-shadow: var(--shadow-2); border-color: color-mix(in oklab, var(--brand-600) 35%, var(--border)); transform: translateY(-1px); }
 .team-name { font-weight: 700; letter-spacing: .2px; color: var(--text-2); }
-.team-inst { opacity: .8; font-style: italic; color: var(--text-2); font-size: .95rem; }
+.team-inst { opacity: .8; font-style: italic; color: var(--text-2); font-size: .95rem; margin-bottom: .15rem; }
+.team-domains { font-size: .8rem; line-height: 1.4; margin-top: .2rem; font-weight: 700; }
+.team-domain { color: var(--text-2); font-weight: 500; }
+.team-domain-separator { color: var(--text-2); font-weight: 500; }
+.team-domain-g1 { color: var(--ds-g1); }
+.team-domain-g2 { color: var(--ds-g2); }
+.team-domain-g3 { color: var(--ds-g3); }
+.team-domain-g4 { color: var(--ds-g4); }
+.team-domain-senior { color: #d97706; }
 
 /* Updates: version tag styling */
 .update-title { display: inline-flex; align-items: center; gap: .6rem; margin: 0 0 .5rem; }
