@@ -212,7 +212,7 @@ export function enhanceInteractions(): void {
     document.addEventListener('keydown', handleKeydown)
 
     window.addEventListener('resize', () => {
-      if (window.innerWidth > 480 && isDrawerOpen()) {
+      if (window.innerWidth > 650 && isDrawerOpen()) {
         closeDrawer()
       }
     })

@@ -29,14 +29,14 @@ app.innerHTML = renderLayout('team', `
         { name: 'Arman Mielke', image: 'arman_mielke.png', institution: 'University of Stuttgart', domains: [{ label: 'Combinatorial Optimization', colorClass: 'team-domain-g3' }] },
         { name: 'Marie Anastacio', image: 'marie_anastacio.png', institution: 'RWTH Aachen University', domains: [{ label: 'SAT Solving', colorClass: 'team-domain-g3' }] },
         { name: 'Erik Müller', image: 'erik_muller.png', institution: 'RWTH Aachen University', domains: [{ label: 'Algorithmic Reasoning', colorClass: 'team-domain-g3' }, { label: 'Weather Forecasting', colorClass: 'team-domain-g4' }] },
-        { name: 'Maya Bechler-Speicher', image: 'maya_bechler_speicher.png', institution: 'Meta', domains: [{ label: 'Senior', colorClass: 'team-domain-senior' }] },
-        { name: 'Michael M. Bronstein', image: 'michael_bronstein.png', institution: 'University of Oxford', domains: [{ label: 'Senior', colorClass: 'team-domain-senior' }] },
-        { name: 'Mikhail Galkin', image: 'mikhail_galkin.png', institution: 'Google Research', domains: [{ label: 'Senior', colorClass: 'team-domain-senior' }] },
-        { name: 'Holger H. Hoos', image: 'holger_hoos.png', institution: 'RWTH Aachen University', domains: [{ label: 'Senior', colorClass: 'team-domain-senior' }] },
-        { name: 'Mathias Niepert', image: 'mathias_niepert.png', institution: 'University of Stuttgart', domains: [{ label: 'Senior', colorClass: 'team-domain-senior' }] },
-        { name: 'Bryan Perozzi', image: 'bryan_perozzi.png', institution: 'Google Research', domains: [{ label: 'Senior', colorClass: 'team-domain-senior' }] },
-        { name: 'Jan Tönshoff', image: 'jan_tonshoff.png', institution: 'Microsoft Research', domains: [{ label: 'Senior', colorClass: 'team-domain-senior' }] },
-        { name: 'Christopher Morris', image: 'christopher_morris.png', institution: 'RWTH Aachen University', domains: [{ label: 'Senior', colorClass: 'team-domain-senior' }] }
+        { name: 'Maya Bechler-Speicher', image: 'maya_bechler_speicher.png', institution: 'Meta', domains: [{ label: 'Advisor', colorClass: 'team-domain-senior' }] },
+        { name: 'Michael M. Bronstein', image: 'michael_bronstein.png', institution: 'University of Oxford', domains: [{ label: 'Advisor', colorClass: 'team-domain-senior' }] },
+        { name: 'Mikhail Galkin', image: 'mikhail_galkin.png', institution: 'Google Research', domains: [{ label: 'Advisor', colorClass: 'team-domain-senior' }] },
+        { name: 'Holger H. Hoos', image: 'holger_hoos.png', institution: 'RWTH Aachen University', domains: [{ label: 'Advisor', colorClass: 'team-domain-senior' }] },
+        { name: 'Mathias Niepert', image: 'mathias_niepert.png', institution: 'University of Stuttgart', domains: [{ label: 'Advisor', colorClass: 'team-domain-senior' }] },
+        { name: 'Bryan Perozzi', image: 'bryan_perozzi.png', institution: 'Google Research', domains: [{ label: 'Advisor', colorClass: 'team-domain-senior' }] },
+        { name: 'Jan Tönshoff', image: 'jan_tonshoff.png', institution: 'Microsoft Research', domains: [{ label: 'Advisor', colorClass: 'team-domain-senior' }] },
+        { name: 'Christopher Morris', image: 'christopher_morris.png', institution: 'RWTH Aachen University', domains: [{ label: 'Advisor', colorClass: 'team-domain-senior' }] }
       ].map(member => `
       <div class="team-item">
         <div class="team-avatar">
