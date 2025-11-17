@@ -4,8 +4,8 @@ import { renderLayout, enhanceInteractions } from '../shared/layout'
 const app = document.querySelector<HTMLDivElement>('#app')!
 
 app.innerHTML = renderLayout('home', `
-  <!-- Slide 1: Hero -->
-  <section class="snap-section hero hero-primary">
+  <!-- Hero -->
+  <section class="hero hero-primary home-hero">
     <div class="container hero-grid">
       <div class="hero-left">
         <h1 class="hero-title"><span class="hero-brand">GraphBench:</span> Next-generation graph learning benchmarking</h1>
@@ -16,69 +16,64 @@ app.innerHTML = renderLayout('home', `
           <a href="./datasets.html" class="btn btn-outline">Explore Datasets</a>
         </div>
       </div>
-      <div class="hero-right" aria-hidden="true",z-index: -1000;>
+      <div class="hero-right" aria-hidden="true">
         <img src="./Graphland.svg" alt="Graph network visualization" class="hero-graphland" />
       </div>
-      <div class="arrow-background"></div>
-      <button id="down-arrow" aria-label="Scroll to datasets" class="arrow-btn arrow-down" title="Scroll">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </button>
-      <div class="arrow-caption arrow-caption-down">What's in it?</div>
     </div>
   </section>
 
-  <!-- Slide 2: Explore datasets (interactive flow figure) -->
-  <section class="snap-section section-white flow-slide" style="background:#fff;">
+  <!-- Explore datasets (interactive flow figure) -->
+  <section class="section-white flow-slide home-offset" style="background:#fff;">
     <div class="container">
 
-      <div id="flow-figure" class="flow-wrap">
-        <svg id="flow-svg" class="flow-svg" aria-hidden="true"></svg>
-        <div class="flow-col flow-left">
-          <div class="flow-item accent-g1"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./datasets.html#ds-social" class="flow-node" data-id="social" data-group="1"><span class="icon" aria-hidden="true"></span><span class="label">Social Networks</span></a>
+      <div class="flow-figure-shell">
+        <div id="flow-figure" class="flow-wrap">
+          <svg id="flow-svg" class="flow-svg" aria-hidden="true"></svg>
+          <div class="flow-col flow-left">
+            <div class="flow-item accent-g1"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+              <a href="./datasets.html#ds-social" class="flow-node" data-id="social" data-group="1"><span class="icon" aria-hidden="true"></span><span class="label">Social Networks</span></a>
+            </div>
+            <div class="flow-item accent-g2"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+              <a href="./datasets.html#ds-chip" class="flow-node" data-id="chip" data-group="2"><span class="icon" aria-hidden="true"></span><span class="label">Chip Design</span></a>
+            </div>
+            <div class="flow-item accent-g2"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+              <a href="./datasets.html#ds-circuits" class="flow-node" data-id="circuits" data-group="2"><span class="icon" aria-hidden="true"></span><span class="label">Electronic Circuits</span></a>
+            </div>
+            <div class="flow-item accent-g3"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+              <a href="./datasets.html#ds-sat" class="flow-node" data-id="sat" data-group="3"><span class="icon" aria-hidden="true"></span><span class="label">SAT Solving</span></a>
+            </div>
+            <div class="flow-item accent-g3"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+              <a href="./datasets.html#ds-co" class="flow-node" data-id="co" data-group="3"><span class="icon" aria-hidden="true"></span><span class="label">Combinatorial Optimization</span></a>
+            </div>
+            <div class="flow-item accent-g3"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+              <a href="./datasets.html#ds-ar" class="flow-node" data-id="ar" data-group="3"><span class="icon" aria-hidden="true"></span><span class="label">Algorithmic Reasoning</span></a>
+            </div>
+            <div class="flow-item accent-g4"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+              <a href="./datasets.html#ds-weather" class="flow-node" data-id="weather" data-group="4"><span class="icon" aria-hidden="true"></span><span class="label">Weather Forecasting</span></a>
+            </div>
           </div>
-          <div class="flow-item accent-g2"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./datasets.html#ds-chip" class="flow-node" data-id="chip" data-group="2"><span class="icon" aria-hidden="true"></span><span class="label">Chip Design</span></a>
-          </div>
-          <div class="flow-item accent-g2"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./datasets.html#ds-circuits" class="flow-node" data-id="circuits" data-group="2"><span class="icon" aria-hidden="true"></span><span class="label">Electronic Circuits</span></a>
-          </div>
-          <div class="flow-item accent-g3"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./datasets.html#ds-sat" class="flow-node" data-id="sat" data-group="3"><span class="icon" aria-hidden="true"></span><span class="label">SAT Solving</span></a>
-          </div>
-          <div class="flow-item accent-g3"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./datasets.html#ds-co" class="flow-node" data-id="co" data-group="3"><span class="icon" aria-hidden="true"></span><span class="label">Combinatorial Optimization</span></a>
-          </div>
-          <div class="flow-item accent-g3"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./datasets.html#ds-ar" class="flow-node" data-id="ar" data-group="3"><span class="icon" aria-hidden="true"></span><span class="label">Algorithmic Reasoning</span></a>
-          </div>
-          <div class="flow-item accent-g4"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="./datasets.html#ds-weather" class="flow-node" data-id="weather" data-group="4"><span class="icon" aria-hidden="true"></span><span class="label">Weather Forecasting</span></a>
-          </div>
-        </div>
 
-        <a id="flow-model" class="flow-model" href="./quickstart.html" aria-label="Your model">
-          <span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-          <div class="model-inner">
-            <span class="icon" aria-hidden="true"><img src="./puzzle.svg" alt="" width="18" height="18"/></span>
-            <span class="t">Your Model</span>
-          </div>
-        </a>
+          <a id="flow-model" class="flow-model" href="./quickstart.html" aria-label="Your model">
+            <span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+            <div class="model-inner">
+              <span class="icon" aria-hidden="true"><img src="./puzzle.svg" alt="" width="18" height="18"/></span>
+              <span class="t">Your Model</span>
+            </div>
+          </a>
 
-        <div class="flow-col flow-right">
-          <div class="flow-item ev1" style="--accent:#4F064F"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev1" data-ev="splits"><span class="label">Evaluation Splits</span></a>
-          </div>
-          <div class="flow-item ev2" style="--accent:#821846"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev2" data-ev="metrics"><span class="label">Evaluation Metrics</span></a>
-          </div>
-          <div class="flow-item ev3" style="--accent:#9E2235"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev3" data-ev="tuning"><span class="label">Hyperparameter Tuning</span></a>
-          </div>
-          <div class="flow-item ev4" style="--accent:#AF3323"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
-            <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev4" data-ev="ood"><span class="label">OOD Generalization</span></a>
+          <div class="flow-col flow-right">
+            <div class="flow-item ev1" style="--accent:#4F064F"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+              <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev1" data-ev="splits"><span class="label">Evaluation Splits</span></a>
+            </div>
+            <div class="flow-item ev2" style="--accent:#821846"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+              <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev2" data-ev="metrics"><span class="label">Evaluation Metrics</span></a>
+            </div>
+            <div class="flow-item ev3" style="--accent:#9E2235"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+              <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev3" data-ev="tuning"><span class="label">Hyperparameter Tuning</span></a>
+            </div>
+            <div class="flow-item ev4" style="--accent:#AF3323"><span class="flow-bg1" aria-hidden="true"></span><span class="flow-bg2" aria-hidden="true"></span>
+              <a href="https://arxiv.org/" target="_blank" rel="noopener noreferrer" class="flow-node eval ev4" data-ev="ood"><span class="label">OOD Generalization</span></a>
+            </div>
           </div>
         </div>
       </div>
@@ -101,23 +96,11 @@ app.innerHTML = renderLayout('home', `
         </div>
       </div>
 
-      <button aria-label="Scroll up" class="arrow-btn arrow-up" data-direction="up" title="Scroll up">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-      </button>
-      <div class="arrow-caption arrow-caption-up">Home</div>
-      <button aria-label="Scroll down" class="arrow-btn arrow-down" data-direction="down" title="Scroll down">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </button>
-      <div class="arrow-caption arrow-caption-down">Quickstart</div>
     </div>
   </section>
 
-  <!-- Slide 3: GUI + Generated code -->
-  <section id="builder" class="snap-section section-white builder-section" style="background:#fff;">
+  <!-- GUI + Generated code -->
+  <section id="builder" class="section-white builder-section home-offset" style="background:#fff;">
     <div class="container">
       <p class="builder-intro">Configure on the left. Code updates live on the right.</p>
       <div class="builder-grid">
@@ -141,108 +124,80 @@ app.innerHTML = renderLayout('home', `
         </aside>
       </div>
     </div>
-      <button aria-label="Scroll up" class="arrow-btn arrow-up" data-direction="up" title="Scroll up">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-      </button>
     </div>
   </section>
-`, 'snap-container')
+`, 'home-main')
 
-// Avoid double scrollbars when snap container is active
-document.body.classList.add('no-body-scroll')
-document.documentElement.classList.add('no-root-scroll')
+// Ensure scrolling is enabled on the home page
+document.body.classList.remove('no-body-scroll')
+document.documentElement.classList.remove('no-root-scroll')
 
-// Arrow scroll to next/prev slide (use snap container scroll position)
-const handleArrow = (btn: HTMLButtonElement) => {
-  const direction = btn.getAttribute('data-direction') || 'down'
-  const container = document.getElementById('main') as HTMLElement
-  const slides = Array.from(document.querySelectorAll('.snap-section')) as HTMLElement[]
-  const viewportTop = container.scrollTop
-  const currentIndex = slides.reduce((best, el, idx) => {
-    const y = el.offsetTop
-    const dist = Math.abs(y - viewportTop)
-    return dist < best.dist ? { idx, dist } : best
-  }, { idx: 0, dist: Number.POSITIVE_INFINITY }).idx
-  const nextIndex = direction === 'up' ? Math.max(0, currentIndex - 1) : Math.min(slides.length - 1, currentIndex + 1)
-  slides[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'start' })
+// Dynamic hero lock: treat the hero as the sole first viewport on wide/short screens
+const syncHeroLock = () => {
+  const width = window.innerWidth || document.documentElement.clientWidth
+  const height = window.innerHeight || document.documentElement.clientHeight
+  const shouldLock = width >= 1000 && height <= 850
+  document.body.classList.toggle('home-hero-lock', shouldLock)
+  const isTallWide = width >= 1000 && height > 850
+  document.body.classList.toggle('home-hero-tall', isTallWide)
 }
-
-const primaryDown = document.getElementById('down-arrow') as HTMLButtonElement | null
-if (primaryDown) {
-  primaryDown.addEventListener('click', () => handleArrow(primaryDown))
-}
-
-document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEach(btn => {
-  btn.addEventListener('click', () => handleArrow(btn))
-})
-
-  // Wheel-to-snap: translate wheel deltas into slide navigation on the snap container
-  ; (function () {
-    const container = document.getElementById('main') as HTMLElement | null
-    if (!container) return
-    let isLocked = false
-    const isScrollableAncestor = (start: HTMLElement | null, deltaX: number, deltaY: number): boolean => {
-      let node: HTMLElement | null = start
-      while (node && node !== container) {
-        const style = window.getComputedStyle(node)
-        const overflowY = style.overflowY
-        const overflowX = style.overflowX
-        const canScrollY = node.scrollHeight > node.clientHeight && (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay')
-        const canScrollX = node.scrollWidth > node.clientWidth && (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay')
-        if (canScrollY && deltaY !== 0) {
-          const canDown = deltaY > 0 && node.scrollTop + node.clientHeight < node.scrollHeight
-          const canUp = deltaY < 0 && node.scrollTop > 0
-          if (canDown || canUp) return true
-        }
-        if (canScrollX && deltaX !== 0) {
-          const canRight = deltaX > 0 && node.scrollLeft + node.clientWidth < node.scrollWidth
-          const canLeft = deltaX < 0 && node.scrollLeft > 0
-          if (canRight || canLeft) return true
-        }
-        node = node.parentElement
-      }
-      return false
-    }
-    const navigate = (dir: 'up' | 'down') => {
-      const fakeBtn = document.createElement('button')
-      fakeBtn.setAttribute('data-direction', dir)
-      handleArrow(fakeBtn as HTMLButtonElement)
-    }
-    const onWheel = (e: WheelEvent) => {
-      // Allow native scrolling inside scrollable descendants (e.g., sidebar, code)
-      const target = e.target as HTMLElement | null
-      // If the wheel event originates over the builder code pane, allow native scrolling
-      if (target && target.closest('.builder-right')) {
-        return
-      }
-      let dx = e.deltaX || 0
-      let dy = e.deltaY || 0
-      // Treat Shift+Wheel as horizontal intent when deltaX is 0
-      if (dx === 0 && e.shiftKey && dy !== 0) { dx = dy; dy = 0 }
-      if (isScrollableAncestor(target, dx, dy)) { return }
-      e.preventDefault()
-      if (isLocked) return
-      // Only navigate slides on vertical intent
-      if (dy === 0) { return }
-      const dir = dy > 0 ? 'down' : 'up'
-      isLocked = true
-      navigate(dir)
-      // simple lock to avoid repeated triggers while smooth scroll runs
-      setTimeout(() => { isLocked = false }, 650)
-    }
-    container.addEventListener('wheel', onWheel, { passive: false })
-    // Also forward wheel on header to the container so scrolling anywhere works
-    const header = document.getElementById('site-header') as HTMLElement | null
-    if (header) header.addEventListener('wheel', onWheel, { passive: false })
-  })()
+syncHeroLock()
+window.addEventListener('resize', syncHeroLock, { passive: true })
 
 // --- Flow figure wiring ---
 ; (function () {
   const svg = document.getElementById('flow-svg') as SVGSVGElement | null
   const wrap = document.getElementById('flow-figure') as HTMLElement | null
   if (!svg || !wrap) return
+
+  const shell = wrap.parentElement as HTMLElement | null
+  if (!shell) return
+
+  // Make the entire flow figure scale like an image:
+  // - centered
+  // - occupies exactly 80% of the screen width (within its container), but never larger than its initial width
+  // - all contents (including fonts) scale uniformly
+  let baseWidth: number | null = null
+  let baseHeight: number | null = null
+
+  const ensureBaseSize = () => {
+    if (baseWidth !== null && baseHeight !== null) return
+    const rect = wrap.getBoundingClientRect()
+    if (!rect.width || !rect.height) return
+    baseWidth = rect.width
+    baseHeight = rect.height
+    wrap.style.width = `${baseWidth}px`
+    wrap.style.height = `${baseHeight}px`
+
+    // Static shell layout properties; size is handled in applyScale
+    shell.style.display = 'flex'
+    shell.style.alignItems = 'center'
+    shell.style.justifyContent = 'center'
+    shell.style.marginInline = 'auto'
+    shell.style.maxWidth = `${baseWidth}px`
+  }
+
+  const applyScale = () => {
+    ensureBaseSize()
+    if (baseWidth === null || baseHeight === null) return
+
+    // Width in vw, increasing on smaller screens: 66vw → 70vw → 74vw
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || baseWidth
+    let vwWidth = 66
+    if (viewportWidth <= 1000) vwWidth = 70
+    if (viewportWidth <= 650) vwWidth = 80
+    if (viewportWidth <= 400) vwWidth = 90
+    shell.style.width = `${vwWidth}vw`
+
+    const shellRect = shell.getBoundingClientRect()
+    const targetVisualWidth = shellRect.width || baseWidth
+    const scale = targetVisualWidth / baseWidth
+    const visualHeight = baseHeight * scale
+
+    shell.style.height = `${visualHeight}px`
+    wrap.style.transformOrigin = 'top center'
+    wrap.style.transform = `scale(${scale})`
+  }
 
   // Inject dataset icons from datasets page helper (duplicated minimal inline set)
   const iconFor = (id: string): string => {
@@ -282,6 +237,7 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
   const evalColors = ['#4F064F', '#821846', '#9E2235', '#AF3323']
 
   const draw = () => {
+    applyScale()
     // Clear previous paths
     while (svg.firstChild) svg.removeChild(svg.firstChild)
 
@@ -308,6 +264,13 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       return `M ${x1} ${y1} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x2} ${y2}`
     }
 
+    // Line thickness breakpoints (you can tweak these values)
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || s.width
+    let strokeWidth = 2
+    if (viewportWidth <= 1000) strokeWidth = 1.7
+    if (viewportWidth <= 720) strokeWidth = 1.4
+    if (viewportWidth <= 520) strokeWidth = 1.1
+
     // Left -> model (enter model at 180°)
     leftNodes.forEach(n => {
       const g = Number(n.getAttribute('data-group') || '1')
@@ -317,7 +280,7 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       const x2 = modelLeft
       const y2 = modelCy
       const d = cubicHoriz(x1, y1, x2, y2)
-      svg.appendChild(makePath(d, colorForGroup(g), 2))
+      svg.appendChild(makePath(d, colorForGroup(g), strokeWidth))
     })
 
     // Model -> right (leave model at 0°)
@@ -328,7 +291,7 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
       const x2 = r.left - s.left
       const y2 = r.top - s.top + r.height / 2
       const d = cubicHoriz(x1, y1, x2, y2)
-      svg.appendChild(makePath(d, evalColors[idx] || evalColors[0], 2))
+      svg.appendChild(makePath(d, evalColors[idx] || evalColors[0], strokeWidth))
     })
   }
 
@@ -890,6 +853,123 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
 
     render(); update()
   })()
+
+// --- Hero text auto scaling ---
+; (() => {
+  const hero = document.querySelector<HTMLElement>('.hero.hero-primary')
+  const heroLeft = hero?.querySelector<HTMLElement>('.hero-left')
+  if (!hero || !heroLeft) return
+
+  const arrow = hero.querySelector<HTMLElement>('.arrow-btn.arrow-down')
+  const header = document.getElementById('site-header') as HTMLElement | null
+  const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+  const stackedLayoutQuery = window.matchMedia('(max-width: 980px)')
+  const graphlandHiddenQuery = window.matchMedia('(max-width: 1000px)')
+  const heroRight = hero.querySelector<HTMLElement>('.hero-right')
+
+  const MIN_SCALE = 0.65
+  const MAX_SCALE_GRAPH = 1
+  const MAX_SCALE_COMPACT = 1.15
+  const FILL_RATIO = 0.86 // leave space for hero-right + breathing room
+  let currentScale = (() => {
+    const initial = Number.parseFloat(getComputedStyle(heroLeft).getPropertyValue('--hero-text-scale'))
+    return Number.isFinite(initial) && initial > 0 ? initial : 1
+  })()
+  let rafId: number | null = null
+  let isAdjusting = false
+  let pending = false
+
+  const maxScaleForLayout = (allowGrow: boolean) => {
+    const graphlandVisible = heroRight ? getComputedStyle(heroRight).display !== 'none' && !graphlandHiddenQuery.matches : !graphlandHiddenQuery.matches
+    const desiredMax = graphlandVisible ? MAX_SCALE_GRAPH : MAX_SCALE_COMPACT
+    return allowGrow ? desiredMax : Math.min(1, desiredMax)
+  }
+
+  const clampScale = (value: number, allowGrow: boolean) => {
+    const max = maxScaleForLayout(allowGrow)
+    const min = Math.min(MIN_SCALE, max)
+    return Math.max(min, Math.min(max, value))
+  }
+
+  const headerHeight = () => {
+    if (header) return header.offsetHeight
+    const cssValue = getComputedStyle(document.documentElement).getPropertyValue('--header-h')
+    const parsed = Number.parseFloat(cssValue)
+    return Number.isFinite(parsed) ? parsed : 64
+  }
+
+  const viewportHeight = () => {
+    if (window.visualViewport) return window.visualViewport.height
+    if (typeof window.innerHeight === 'number') return window.innerHeight
+    return document.documentElement.clientHeight
+  }
+
+  const getAvailableHeight = () => {
+    const arrowHeight = arrow?.offsetHeight ?? 0
+    const reserved = arrowHeight ? arrowHeight + 56 : 96
+    return Math.max(0, viewportHeight() - headerHeight() - reserved)
+  }
+
+  const applyScale = () => {
+    const available = getAvailableHeight()
+    if (!available) return
+    const measuredHeight = heroLeft.scrollHeight
+    if (!measuredHeight) return
+
+    // Base height is the un-scaled height (current measurement divided by applied scale)
+    const baseHeight = measuredHeight / (currentScale || 1)
+    if (!baseHeight) return
+
+    const allowGrow = !stackedLayoutQuery.matches
+    const targetScale = clampScale((available / baseHeight) * FILL_RATIO, allowGrow)
+
+    if (Math.abs(targetScale - currentScale) < 0.02) return
+    currentScale = targetScale
+    isAdjusting = true
+    heroLeft.style.setProperty('--hero-text-scale', targetScale.toFixed(3))
+    requestAnimationFrame(() => {
+      isAdjusting = false
+      if (pending) {
+        pending = false
+        schedule()
+      }
+    })
+  }
+
+  const schedule = () => {
+    if (reduceMotionQuery.matches) return
+    if (isAdjusting) {
+      pending = true
+      return
+    }
+    if (rafId !== null) return
+    rafId = requestAnimationFrame(() => {
+      rafId = null
+      applyScale()
+    })
+  }
+
+  schedule()
+
+  const handleResize = () => schedule()
+  window.addEventListener('resize', handleResize)
+  const bindMediaQuery = (mq: MediaQueryList | null) => {
+    if (!mq) return
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', handleResize)
+    } else if (typeof mq.addListener === 'function') {
+      mq.addListener(handleResize)
+    }
+  }
+  bindMediaQuery(stackedLayoutQuery)
+  bindMediaQuery(reduceMotionQuery)
+  bindMediaQuery(graphlandHiddenQuery)
+
+  const observer = new ResizeObserver(() => schedule())
+  observer.observe(hero)
+  observer.observe(heroLeft)
+  if (heroRight) observer.observe(heroRight)
+})()
 
 // Initialize copy button functionality
 enhanceInteractions()
