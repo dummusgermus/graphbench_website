@@ -1,4 +1,4 @@
-import{r as D,e as F}from"./layout-D1CfDK2v.js";const R=document.querySelector("#app");R.innerHTML=D("home",`
+import{r as D,e as F}from"./layout-BPZ-ecsS.js";const R=document.querySelector("#app");R.innerHTML=D("home",`
   <!-- Slide 1: Hero -->
   <section class="snap-section hero hero-primary">
     <div class="container hero-grid">
