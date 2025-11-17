@@ -1,4 +1,4 @@
-import{r as t,e as n}from"./layout-D43NSiCu.js";const r=["@article{name2025graphbench,","  title={GraphBench: Next-generation graph learning benchmarking},","  author={name, name, name},","  journal={arXiv preprint arXiv:00000.00000},","  year={2025}","}"],a=r.join(`
+import{r as t,e as n}from"./layout-BpFo-YI5.js";const r=["@article{name2025graphbench,","  title={GraphBench: Next-generation graph learning benchmarking},","  author={name, name, name},","  journal={arXiv preprint arXiv:00000.00000},","  year={2025}","}"],a=r.join(`
 `),s=e=>e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"),o=s(a),p=s(a).replace(/"/g,"&quot;").replace(/\n/g,"&#10;"),i=document.querySelector("#app");i.innerHTML=t("quickstart",`
   <section class="page-header tight">
     <div class="container">
