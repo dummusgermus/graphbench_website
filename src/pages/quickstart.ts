@@ -1,6 +1,23 @@
 import '../style.css'
 import { renderLayout, enhanceInteractions } from '../shared/layout'
 
+const citationBibtexLines = [
+  '@article{name2025graphbench,',
+  '  title={GraphBench: Next-generation graph learning benchmarking},',
+  '  author={name, name, name},',
+  '  journal={arXiv preprint arXiv:00000.00000},',
+  '  year={2025}',
+  '}',
+]
+const citationBibtex = citationBibtexLines.join('\n')
+const escapeHtml = (value: string): string =>
+  value
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+const citationBibtexHtml = escapeHtml(citationBibtex)
+const citationBibtexCopy = escapeHtml(citationBibtex).replace(/"/g, '&quot;').replace(/\n/g, '&#10;')
+
 const app = document.querySelector<HTMLDivElement>('#app')!
 app.innerHTML = renderLayout('quickstart', `
   <section class="page-header tight">
@@ -148,13 +165,11 @@ app.innerHTML = renderLayout('quickstart', `
             <div class="body">
               <h3>Cite GraphBench</h3>
               <p>If you use GraphBench in your work, please cite our paper (Bibtex below).</p>
-              <div class="cite-box" role="region" aria-label="BibTeX citation">
-@article{name2025graphbench,
-  title={GraphBench: Next-generation graph learning benchmarking},
-  author={name, name, name},
-  journal={arXiv preprint arXiv:00000.00000},
-  year={2025}
-}
+              <div class="cite-box code-wrap" role="region" aria-label="BibTeX citation">
+                <button class="copy-btn" data-copy="${citationBibtexCopy}" aria-label="Copy BibTeX citation" title="Copy">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+                <pre><code class="cite-code code-manual">${citationBibtexHtml}</code></pre>
               </div>
             </div>
           </li>

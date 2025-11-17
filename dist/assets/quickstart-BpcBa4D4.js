@@ -1,4 +1,5 @@
-import{r as a,e as s}from"./layout-CWv77IpC.js";const e=document.querySelector("#app");e.innerHTML=a("quickstart",`
+import{r as t,e as n}from"./layout-D1CfDK2v.js";const r=["@article{name2025graphbench,","  title={GraphBench: Next-generation graph learning benchmarking},","  author={name, name, name},","  journal={arXiv preprint arXiv:00000.00000},","  year={2025}","}"],a=r.join(`
+`),s=e=>e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"),o=s(a),p=s(a).replace(/"/g,"&quot;").replace(/\n/g,"&#10;"),i=document.querySelector("#app");i.innerHTML=t("quickstart",`
   <section class="page-header tight">
     <div class="container">
       <div class="title-row">
@@ -160,13 +161,11 @@ results = graphbench.evaluator(dataset_name, opt_model, dataset['valid'], datase
             <div class="body">
               <h3>Cite GraphBench</h3>
               <p>If you use GraphBench in your work, please cite our paper (Bibtex below).</p>
-              <div class="cite-box" role="region" aria-label="BibTeX citation">
-@article{name2025graphbench,
-  title={GraphBench: Next-generation graph learning benchmarking},
-  author={name, name, name},
-  journal={arXiv preprint arXiv:00000.00000},
-  year={2025}
-}
+              <div class="cite-box code-wrap" role="region" aria-label="BibTeX citation">
+                <button class="copy-btn" data-copy="${p}" aria-label="Copy BibTeX citation" title="Copy">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+                <pre><code class="cite-code code-manual">${o}</code></pre>
               </div>
             </div>
           </li>
@@ -175,4 +174,4 @@ results = graphbench.evaluator(dataset_name, opt_model, dataset['valid'], datase
     </div>
   </section>
   <div class="page-bottom-bar">© ${new Date().getFullYear()} GraphBench</div>
-`);s();
+`);n();
