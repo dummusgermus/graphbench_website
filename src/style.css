@@ -73,14 +73,12 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   overflow-y: auto;
-  background: radial-gradient(900px 500px at 0% -10%, rgba(70,120,255,.06), transparent 60%),
-              radial-gradient(700px 400px at 100% 0%, rgba(20,184,166,.06), transparent 60%),
-              var(--surface-0);
+  background: #ffffff;
 }
 
 body.no-body-scroll { overflow: hidden; height: 100svh; }
 html, body { height: 100%; }
-html { overflow-x: hidden; scrollbar-gutter: auto; max-width: 100vw; }
+html { overflow-x: hidden; scrollbar-gutter: auto; max-width: 100vw; background: #ffffff; }
 html.no-root-scroll { overflow: hidden; height: 100%; }
 html.no-root-scroll body { overflow: hidden; height: 100%; }
 

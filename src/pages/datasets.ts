@@ -2,6 +2,7 @@ import '../style.css'
 import { initWeatherGlobe } from '../features/weather/globe'
 import { renderLayout, enhanceInteractions } from '../shared/layout'
 import { initArGraphVisualizer } from '../features/ar/visualizer'
+import { initCoGraphVisualizer } from '../features/co/visualizer'
 
 type Ds = { id: string; name: string; group: number; regimes: string[] }
 const items: Ds[] = [
@@ -126,7 +127,7 @@ const dsSlide = (r: Ds, idx: number, total: number): string => {
       ? `<p>We focus on learning to generate small Boolean circuits. Each circuit is modeled as an and-inverter graph (<strong class="accent-num" style="--tip-accent: var(--ds-g2);">AIG</strong>) of logic gates, where nodes denote gates and edges represent signal connections.</p>
         <p>Given a set of Boolean functions, the model must learn to produce functionally equivalent, optimized circuits, targeting reductions in area, power, and delay.</p>`
     : r.id === 'co'
-      ? `<p>We synthetically generate optimization problems across <strong class="accent-num tip-link tip-enhanced" data-vars="Erdős–Rényi\nBarabási–Albert\nRandom Regular" tabindex="0" role="button" aria-label="Show random graph families" style="--tip-accent: var(--ds-g3);">3</strong> random graph families — each available in <strong class="accent-num tip-link tip-enhanced" data-vars="SMALL\nLARGE" tabindex="0" role="button" aria-label="Show configurations" style="--tip-accent: var(--ds-g3);">2</strong> configurations.</p>
+      ? `<p>We synthetically generate optimization problems across <strong class="accent-num tip-link tip-enhanced" data-vars="Erdős–Rényi\nBarabási–Albert\nRandom Bipartite" tabindex="0" role="button" aria-label="Show random graph families" style="--tip-accent: var(--ds-g3);">3</strong> random graph families — each available in <strong class="accent-num tip-link tip-enhanced" data-vars="SMALL\nLARGE" tabindex="0" role="button" aria-label="Show configurations" style="--tip-accent: var(--ds-g3);">2</strong> configurations.</p>
         <p>Every instance encodes one of <strong class="accent-num tip-link tip-enhanced" data-vars="Maximum Independent Set\nMaximum Cut\nGraph Coloring" tabindex="0" role="button" aria-label="Show NP-hard problems" style="--tip-accent: var(--ds-g3);">3</strong> NP-hard problems with ground-truth solutions computed via exact solvers.</p>
         <p>Models must learn to predict optimal solution costs or approximate combinatorial objectives, testing both supervised and unsupervised regimes.</p>`
     : r.id === 'ar'
@@ -169,7 +170,7 @@ const dsSlide = (r: Ds, idx: number, total: number): string => {
             </div>
           </div>
         </div>
-        <div class="col-6 ${r.id === 'weather' ? 'wf-right' : (r.id === 'ar' ? 'ar-right' : '')}" id="ds-side-${r.id}"></div>
+        <div class="col-6 ${r.id === 'weather' ? 'wf-right' : (r.id === 'ar' ? 'ar-right' : (r.id === 'co' ? 'ar-right' : ''))}" id="ds-side-${r.id}"></div>
       </div>
       ${upBtn}
       <div class="arrow-caption arrow-caption-up">${prevName}</div>
@@ -318,6 +319,13 @@ enhanceInteractions()
     try { initArGraphVisualizer({ mountEl: mount }) } catch { }
   })()
 
+  // Initialize combinatorial optimization graph generator on its slide
+  ; (function () {
+    const mount = document.getElementById('ds-side-co') as HTMLElement | null
+    if (!mount) return
+    try { initCoGraphVisualizer({ mountEl: mount }) } catch { }
+  })()
+
   // While hovering the interactive 3D visualizations, prevent snap scrolling
   ; (function () {
     const blockWheel = (el: HTMLElement | null) => {
@@ -330,6 +338,7 @@ enhanceInteractions()
     }
     blockWheel(document.getElementById('ds-side-weather') as HTMLElement | null)
     blockWheel(document.getElementById('ds-side-ar') as HTMLElement | null)
+    blockWheel(document.getElementById('ds-side-co') as HTMLElement | null)
   })()
 
 // Progressive enhancement: rich hover window for variable list and numeric tips
