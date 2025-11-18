@@ -155,6 +155,33 @@ export function initSocialNetworkVisualizer(opts: { mountEl: HTMLElement }) {
     chargeForce.strength(-60)  // Reduced repulsion for tighter clustering
   }
 
+  // Add boundary force to keep nodes within viewport
+  const boundaryForce = () => {
+    const padding = 30  // Safe zone from edges
+    const width = 600
+    const height = 425
+    const strength = 0.03  // Gentle push back
+    
+    nodes.forEach(node => {
+      if (node.x !== undefined && node.vx !== undefined) {
+        if (node.x < padding) {
+          node.vx = node.vx + (padding - node.x) * strength
+        } else if (node.x > width - padding) {
+          node.vx = node.vx - (node.x - (width - padding)) * strength
+        }
+      }
+      if (node.y !== undefined && node.vy !== undefined) {
+        if (node.y < padding) {
+          node.vy = node.vy + (padding - node.y) * strength
+        } else if (node.y > height - padding) {
+          node.vy = node.vy - (node.y - (height - padding)) * strength
+        }
+      }
+    })
+  }
+  
+  graph.d3Force('boundary', boundaryForce)
+
   // Size the canvas
   const updateSize = () => {
     const w = Math.max(400, graphWrap.clientWidth || 600)
