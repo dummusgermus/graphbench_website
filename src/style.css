@@ -1135,7 +1135,9 @@ section .section-accent h2::after { content: ""; position: absolute; left: 0; bo
   padding-top: 45px;
 }
 .ar-right .ar-viz-abs { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: .6rem; }
+.ar-right .social-viz { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .ar-right .ar-graph { width: 600px; height: 425px; border-radius: 12px; background: transparent; margin: 0 auto; display: block; }
+.ar-right .social-graph { width: 600px; height: 425px; border-radius: 12px; background: transparent; margin: 0 auto; display: block; }
 .ar-right .ar-ctrls { position: static; transform: none; margin: 0 auto .2rem; background: transparent; border: 0; padding: 0; box-shadow: none; display: flex; align-items: flex-end; justify-content: center; gap: .55rem; flex-wrap: nowrap; width: auto; }
 .ar-right .ar-sel { display: inline-flex; flex-direction: column; align-items: flex-start; gap: .25rem; min-width: 0; }
 .ar-right .ar-sel label { font-size: .72rem; font-weight: 600; letter-spacing: .03em; color: color-mix(in oklab, var(--text-2) 55%, var(--surface-2)); }

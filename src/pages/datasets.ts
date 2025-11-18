@@ -3,6 +3,7 @@ import { initWeatherGlobe } from '../features/weather/globe'
 import { renderLayout, enhanceInteractions } from '../shared/layout'
 import { initArGraphVisualizer } from '../features/ar/visualizer'
 import { initCoGraphVisualizer } from '../features/co/visualizer'
+import { initSocialNetworkVisualizer } from '../features/social/visualizer'
 
 type Ds = { id: string; name: string; group: number; regimes: string[] }
 const items: Ds[] = [
@@ -20,7 +21,7 @@ const dsStats: Record<string, { graphs: string; nodes: string; edges: string; si
   chip: { graphs: '1.2M', nodes: '– 335', edges: '', size: '' },
   circuits: { graphs: '93,000', nodes: '13 – 24', edges: '30 – 56', size: '' },
   sat: { graphs: '208,788', nodes: '', edges: '', size: '' },
-  co: { graphs: '300,000', nodes: '200 – 1,200', edges: '', size: '' },
+  co: { graphs: '300,000', nodes: '200 – 1,200', edges: '792 – 187,600', size: '176.8GB' },
   ar: { graphs: '21M', nodes: '16 – 512', edges: '15 – 7,319', size: '85GB' },
   weather: { graphs: '93,544', nodes: '4,610', edges: '7,928', size: '60.6GB' },
 }
@@ -170,7 +171,7 @@ const dsSlide = (r: Ds, idx: number, total: number): string => {
             </div>
           </div>
         </div>
-        <div class="col-6 ${r.id === 'weather' ? 'wf-right' : (r.id === 'ar' ? 'ar-right' : (r.id === 'co' ? 'ar-right' : ''))}" id="ds-side-${r.id}"></div>
+        <div class="col-6 ${r.id === 'weather' ? 'wf-right' : (r.id === 'ar' ? 'ar-right' : (r.id === 'co' ? 'ar-right' : (r.id === 'social' ? 'ar-right' : '')))}" id="ds-side-${r.id}"></div>
       </div>
       ${upBtn}
       <div class="arrow-caption arrow-caption-up">${prevName}</div>
@@ -305,6 +306,13 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
 enhanceInteractions()
 
 
+// Initialize social network visualizer on its slide
+;(function () {
+  const mount = document.getElementById('ds-side-social') as HTMLElement | null
+  if (!mount) return
+  try { initSocialNetworkVisualizer({ mountEl: mount }) } catch {}
+})()
+
 // Initialize weather globe on its slide after DOM is ready
 ;(function () {
   const mount = document.getElementById('ds-side-weather') as HTMLElement | null
@@ -336,6 +344,7 @@ enhanceInteractions()
         e.preventDefault()
       }, { passive: false })
     }
+    blockWheel(document.getElementById('ds-side-social') as HTMLElement | null)
     blockWheel(document.getElementById('ds-side-weather') as HTMLElement | null)
     blockWheel(document.getElementById('ds-side-ar') as HTMLElement | null)
     blockWheel(document.getElementById('ds-side-co') as HTMLElement | null)
