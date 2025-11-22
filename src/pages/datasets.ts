@@ -29,34 +29,23 @@ const dsStats: Record<string, { graphs: string; nodes: string; edges: string; si
 const dsIcon = (id: string): string => {
   switch (id) {
     case 'social':
-      // person (head and shoulders)
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M6 19c0-2.5 3-4 6-4s6 1.5 6 4"/></svg>'
     case 'chip':
-      // microchip
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M7 3v2M12 3v2M17 3v2M21 7h-2M21 12h-2M21 17h-2M3 7h2M3 12h2M3 17h2M7 21v-2M12 21v-2M17 21v-2"/></svg>'
     case 'circuits':
-      // circuit loop with components on the path
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="10" y="2" width="4" height="2" rx="0.5"/><rect x="20" y="10" width="2" height="4" rx="0.5"/><rect x="10" y="20" width="4" height="2" rx="0.5"/><rect x="2" y="10" width="2" height="4" rx="0.5"/><path d="M4 12h7v2h2h5"/></svg>'
     case 'sat':
-      // AND gate style
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h6a5 5 0 0 1 0 10H6z"/><path d="M6 9H3M6 15H3M17 12h4"/></svg>'
     case 'co':
-      // graph cut: two partitions separated by dashed line, crossing edges cut
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16" stroke-dasharray="3 3"/><circle cx="6" cy="8" r="2"/><circle cx="6" cy="16" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="18" cy="16" r="2"/><path d="M8 9l3 2"/><path d="M13 11l3 2"/><path d="M8 15l3-2"/><path d="M13 13l3-2"/></svg>'
     case 'ar':
-      // flowchart
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="6" height="4" rx="1"/><rect x="15" y="3" width="6" height="4" rx="1"/><rect x="9" y="17" width="6" height="4" rx="1"/><path d="M6 7v4h12V7M12 13v4"/></svg>'
     case 'weather':
-      // cloud with rain
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 16.5a4.5 4.5 0 0 0-2-8.5 5 5 0 0 0-9.6 1.5A3.5 3.5 0 1 0 5 16"/><path d="M8 19v2M12 18v3M16 19v2"/></svg>'
     default:
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/></svg>'
   }
 }
-
-// regimeChip kept for the previous card-based layout
-
-// legacy card renderer kept for reference (not used in table layout)
 
 const dsUnifiedRows = (rows: Ds[], group: number, label: string) => {
   const accent = group === 1 ? 'accent-g1' : group === 2 ? 'accent-g2' : group === 3 ? 'accent-g3' : 'accent-g4'
@@ -89,13 +78,11 @@ const dsUnifiedRows = (rows: Ds[], group: number, label: string) => {
   return headerRow + bodyRows
 }
 
-// Build per-dataset slide (accented layout)
 const dsSlide = (r: Ds, idx: number, total: number): string => {
   const tags = r.regimes.map(x => {
     const cls = x === 'Generation' ? 'tag-gen' : (x === 'Node-level') ? 'tag-node' : ((x === 'Edge-level' || x === 'edge-level') ? 'tag-edge' : 'tag-graph')
     return `<span class=\"chip-sm ${cls}\">${x}</span>`
   }).join(' ')
-  // Always render an up arrow so the first dataset slide can return to the table slide
   const upBtn = `
     <button aria-label="Previous dataset" class="arrow-btn arrow-up" data-direction="up" title="Previous dataset">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -243,7 +230,6 @@ app.innerHTML = renderLayout('datasets', slidesHtml, 'snap-container')
 document.body.classList.add('no-body-scroll')
 document.documentElement.classList.add('no-root-scroll')
 
-// Arrow scroll to next/prev slide (use snap container scroll position)
 const handleArrow = (btn: HTMLButtonElement) => {
   const direction = btn.getAttribute('data-direction') || 'down'
   const container = document.getElementById('main') as HTMLElement
@@ -262,7 +248,6 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
   btn.addEventListener('click', () => handleArrow(btn))
 })
 
-  // Wheel-to-snap: translate wheel deltas into slide navigation on the snap container
   ; (function () {
     const container = document.getElementById('main') as HTMLElement | null
     if (!container) return
@@ -285,7 +270,6 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
     if (header) header.addEventListener('wheel', onWheel, { passive: false })
   })()
 
-// Learn more buttons in the table jump to the matching dataset slide
 ;(function () {
   const container = document.getElementById('main') as HTMLElement | null
   if (!container) return
@@ -305,41 +289,34 @@ document.querySelectorAll<HTMLButtonElement>('.arrow-btn[data-direction]').forEa
 
 enhanceInteractions()
 
-
-// Initialize social network visualizer on its slide
 ;(function () {
   const mount = document.getElementById('ds-side-social') as HTMLElement | null
   if (!mount) return
   try { initSocialNetworkVisualizer({ mountEl: mount }) } catch {}
 })()
 
-// Initialize weather globe on its slide after DOM is ready
 ;(function () {
   const mount = document.getElementById('ds-side-weather') as HTMLElement | null
   if (!mount) return
   try { initWeatherGlobe({ mountEl: mount, skin: 'blue' }) } catch {}
 })()
 
-  // Initialize algorithmic reasoning graph generator on its slide
   ; (function () {
     const mount = document.getElementById('ds-side-ar') as HTMLElement | null
     if (!mount) return
     try { initArGraphVisualizer({ mountEl: mount }) } catch { }
   })()
 
-  // Initialize combinatorial optimization graph generator on its slide
   ; (function () {
     const mount = document.getElementById('ds-side-co') as HTMLElement | null
     if (!mount) return
     try { initCoGraphVisualizer({ mountEl: mount }) } catch { }
   })()
 
-  // While hovering the interactive 3D visualizations, prevent snap scrolling
   ; (function () {
     const blockWheel = (el: HTMLElement | null) => {
       if (!el) return
       el.addEventListener('wheel', (e: WheelEvent) => {
-        // Allow three.js to receive the event first, then block scrolling/snap
         e.stopPropagation()
         e.preventDefault()
       }, { passive: false })
@@ -350,7 +327,6 @@ enhanceInteractions()
     blockWheel(document.getElementById('ds-side-co') as HTMLElement | null)
   })()
 
-// Progressive enhancement: rich hover window for variable list and numeric tips
 ;(function () {
   const triggers = Array.from(document.querySelectorAll('.tip-link.tip-enhanced')) as HTMLElement[]
   if (!triggers.length) return
@@ -372,11 +348,9 @@ enhanceInteractions()
       fly.style.setProperty('--tip-accent', (accent || fallback).trim())
     } catch {}
     const data = (seed.getAttribute('data-vars') || '').split('\n')
-    // Determine layout type
     const splitAt = data.findIndex(x => x.trim().toLowerCase().startsWith('atmospheric'))
     const isWeather = splitAt !== -1
     const isDifficulty = data.some(x => x.includes('Training|') || x.includes('Test|'))
-    // Width behavior
     if (isWeather) {
       fly.style.width = ''
     } else {
@@ -395,7 +369,6 @@ enhanceInteractions()
       if (surf.length) mkSec('Surface variables', surf)
       if (atm.length) mkSec('Atmospheric variables', atm)
     } else if (isDifficulty) {
-      // Parse blocks separated by blank lines, each starting with a header ending with ':'
       const blocks: { title: string; train: string[]; test: string[] }[] = []
       let i = 0
       while (i < data.length) {
@@ -459,7 +432,6 @@ enhanceInteractions()
         grid.appendChild(left); grid.appendChild(mid); grid.appendChild(right)
         fly!.appendChild(grid)
         try {
-          // Center arrow relative to list bodies (ignoring labels) and move it lower
           const leftLabH = (left.querySelector('.tip-col-label') as HTMLElement)?.offsetHeight || 0
           const rightLabH = (right.querySelector('.tip-col-label') as HTMLElement)?.offsetHeight || 0
           const shift = Math.max(leftLabH, rightLabH) / 2 + 7
@@ -478,7 +450,6 @@ enhanceInteractions()
     const rect = trigger.getBoundingClientRect()
     const margin = 8
     const measuredH = fly.offsetHeight || 320
-    // Default: show above. For difficulty tooltips (with Training|/Test|), center vertically but slightly higher
     const dataStr = trigger.getAttribute('data-vars') || ''
     const isDifficulty = /\bTraining\|/.test(dataStr) || /\bTest\|/.test(dataStr)
     let top = isDifficulty
@@ -507,7 +478,6 @@ enhanceInteractions()
       const measuredW = fly.offsetWidth || 0
       fly.style.width = `${measuredW + (isFinite(padLeft) ? padLeft : 0)}px`
     } catch {
-      // fallback: keep fit-content
     }
   }
   const show = (trigger: HTMLElement) => {
@@ -529,17 +499,15 @@ enhanceInteractions()
   window.addEventListener('scroll', () => { if (fly && fly.style.display === 'block' && activeTrigger) place(activeTrigger) }, { passive: true })
 })()
 
-  // First-time tooltip hint for dataset subsections
   ; (function () {
     const STORAGE_KEY = 'graphbench-tooltip-hint-seen'
     const HINT_DELAY = 2000
 
-    // Check if hint was already shown
     if (localStorage.getItem(STORAGE_KEY)) return
 
     let hintEl: HTMLDivElement | null = null
     let timeoutId: number | null = null
-    let hasShownHint = false // Track if hint has been shown in this session
+    let hasShownHint = false
 
     const createHint = (accentColor: string) => {
       if (hintEl) return hintEl
@@ -619,19 +587,16 @@ enhanceInteractions()
     }
 
     const showHint = (accentColor: string) => {
-      // Only show hint once per session
       if (hasShownHint) return
 
       const hint = createHint(accentColor)
       if (!hint) return
 
-      // Update cursor color
       const cursorIcon = hint.querySelector('span[style*="mask"]') as HTMLElement
       if (cursorIcon) {
         cursorIcon.style.backgroundColor = accentColor
       }
 
-      // Show with animation
       setTimeout(() => {
         hint.style.transform = 'translateX(-170px)'
       }, 100)
@@ -652,7 +617,6 @@ enhanceInteractions()
     }
 
     const scheduleHint = (accentColor: string) => {
-      // Only schedule hint if it hasn't been shown yet
       if (hasShownHint) return
 
       if (timeoutId) clearTimeout(timeoutId)
@@ -661,7 +625,6 @@ enhanceInteractions()
       }, HINT_DELAY)
     }
 
-    // Listen for dataset slide navigation
     const container = document.getElementById('main') as HTMLElement | null
     if (!container) return
 
@@ -676,7 +639,6 @@ enhanceInteractions()
         return dist < best.dist ? { idx, dist } : best
       }, { idx: 0, dist: Number.POSITIVE_INFINITY }).idx
 
-      // Only show hint when first navigating to a dataset slide (not the overview table)
       if (newSlide !== currentSlide && newSlide > 0 && !hasShownHint) {
         currentSlide = newSlide
         const slideEl = slides[newSlide]
@@ -690,7 +652,6 @@ enhanceInteractions()
       }
     }
 
-    // Check on scroll and initial load
     container.addEventListener('scroll', checkSlide, { passive: true })
     checkSlide()
 })()

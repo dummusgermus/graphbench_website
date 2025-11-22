@@ -128,11 +128,9 @@ app.innerHTML = renderLayout('home', `
   </section>
 `, 'home-main')
 
-// Ensure scrolling is enabled on the home page
 document.body.classList.remove('no-body-scroll')
 document.documentElement.classList.remove('no-root-scroll')
 
-// Dynamic hero lock: treat the hero as the sole first viewport on wide/short screens
 const syncHeroLock = () => {
   const width = window.innerWidth || document.documentElement.clientWidth
   const height = window.innerHeight || document.documentElement.clientHeight
@@ -144,7 +142,6 @@ const syncHeroLock = () => {
 syncHeroLock()
 window.addEventListener('resize', syncHeroLock, { passive: true })
 
-// --- Flow figure wiring ---
 ; (function () {
   const svg = document.getElementById('flow-svg') as SVGSVGElement | null
   const wrap = document.getElementById('flow-figure') as HTMLElement | null
@@ -153,10 +150,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
   const shell = wrap.parentElement as HTMLElement | null
   if (!shell) return
 
-  // Make the entire flow figure scale like an image:
-  // - centered
-  // - occupies exactly 80% of the screen width (within its container), but never larger than its initial width
-  // - all contents (including fonts) scale uniformly
   let baseWidth: number | null = null
   let baseHeight: number | null = null
 
@@ -169,7 +162,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
     wrap.style.width = `${baseWidth}px`
     wrap.style.height = `${baseHeight}px`
 
-    // Static shell layout properties; size is handled in applyScale
     shell.style.display = 'flex'
     shell.style.alignItems = 'center'
     shell.style.justifyContent = 'center'
@@ -181,7 +173,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
     ensureBaseSize()
     if (baseWidth === null || baseHeight === null) return
 
-    // Width in vw, increasing on smaller screens: 66vw → 70vw → 74vw
     const viewportWidth = window.innerWidth || document.documentElement.clientWidth || baseWidth
     let vwWidth = 66
     if (viewportWidth <= 1000) vwWidth = 70
@@ -199,7 +190,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
     wrap.style.transform = `scale(${scale})`
   }
 
-  // Inject dataset icons from datasets page helper (duplicated minimal inline set)
   const iconFor = (id: string): string => {
     switch (id) {
       case 'social': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M6 19c0-2.5 3-4 6-4s6 1.5 6 4"/></svg>'
@@ -238,7 +228,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
 
   const draw = () => {
     applyScale()
-    // Clear previous paths
     while (svg.firstChild) svg.removeChild(svg.firstChild)
 
     const leftNodes = Array.from(document.querySelectorAll('.flow-left .flow-node')) as HTMLElement[]
@@ -255,7 +244,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
     const modelCy = m.top - s.top + m.height / 2
 
     const cubicHoriz = (x1: number, y1: number, x2: number, y2: number): string => {
-      // Horizontal tangents at endpoints: control points share y values
       const dx = Math.max(32, Math.min(120, Math.abs(x2 - x1) * 0.35))
       const c1x = x1 + dx
       const c1y = y1
@@ -264,14 +252,12 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       return `M ${x1} ${y1} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x2} ${y2}`
     }
 
-    // Line thickness breakpoints (you can tweak these values)
     const viewportWidth = window.innerWidth || document.documentElement.clientWidth || s.width
     let strokeWidth = 2
     if (viewportWidth <= 1000) strokeWidth = 1.7
     if (viewportWidth <= 720) strokeWidth = 1.4
     if (viewportWidth <= 520) strokeWidth = 1.1
 
-    // Left -> model (enter model at 180°)
     leftNodes.forEach(n => {
       const g = Number(n.getAttribute('data-group') || '1')
       const r = n.getBoundingClientRect()
@@ -283,7 +269,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       svg.appendChild(makePath(d, colorForGroup(g), strokeWidth))
     })
 
-    // Model -> right (leave model at 0°)
     rightNodes.forEach((n, idx) => {
       const r = n.getBoundingClientRect()
       const x1 = modelRight
@@ -300,11 +285,9 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
   window.addEventListener('resize', draw, { passive: true })
   setTimeout(draw, 0)
 
-    // Placeholder links – wire to real anchors later
     ; (document.querySelector('.flow-model') as HTMLElement | null)?.addEventListener('click', () => { })
 })()
 
-  // --- Slide 3: Dataset builder + code generator ---
   ; (function () {
     const mount = document.getElementById('config-panel') as HTMLElement | null
     const codeEl = document.getElementById('gen-code') as HTMLElement | null
@@ -321,7 +304,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       { id: 'weather', name: 'Weather Forecasting', hasResolution: true },
     ]
 
-    // Define subsets for all datasets (single subset equal to main for simple ones)
     const subsetsByDataset: Record<string, string[]> = {
       social: ['social_networks'],
       chip: ['chip_design'],
@@ -332,16 +314,12 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       weather: ['era5_64x32', 'era5_240x121'],
     }
 
-    // state
     const selectedIds = new Set<string>()
     const selectedSubsets = Object.fromEntries(Object.keys(subsetsByDataset).map(id => [id, new Set<string>()])) as Record<string, Set<string>>
     const expandedIds = new Set<string>()
     const customSplits = Object.fromEntries(Object.keys(subsetsByDataset).map(id => [id, {}])) as Record<string, Record<string, { train: number, valid: number, test: number }>>
     const openSplitPanels = new Set<string>()
 
-    // defaults: none selected
-
-    // Local icon set for dataset rows
     const iconFor = (id: string): string => {
       switch (id) {
         case 'social': return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M6 19c0-2.5 3-4 6-4s6 1.5 6 4"/></svg>'
@@ -479,7 +457,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
         </div>`
     }
 
-    // Compute selected subset names for code generation
     const selectedSubsetNames = (): string[] => {
       const ids = Array.from(selectedIds.values())
       return ids.flatMap(id => Array.from(selectedSubsets[id] || []))
@@ -510,7 +487,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       if (optPT) lines.push('pre_transform = ...  # optional: transform applied at load-time')
       if (optT) lines.push('transform = ...  # optional: transform applied at runtime')
 
-      // Add custom splits if any exist
       const hasCustomSplits = names.some(name => {
         const entry = Object.entries(subsetsByDataset).find(([_, subs]) => subs.includes(name))
         if (!entry) return false
@@ -561,15 +537,12 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       .replace(/>/g, '&gt;')
 
     const tokenColorize = (code: string): string => {
-      // very lightweight manual coloring similar to quickstart's examples
-      // apply in order to avoid double-wrapping
       let out = escapeHtml(code)
       out = out.replace(/\b(import)\b/g, '<span class="kw">$1</span>')
       out = out.replace(/\b(graphbench)\b/g, '<span class="ns">$1</span>')
       out = out.replace(/\b(loader|optimize|evaluator)\b/g, '<span class="fn">$1</span>')
       out = out.replace(/\b(model|dataset_name|datasets|dataset|opt_model|opt_models|results|name)\b/g, '<span class="var">$1</span>')
       out = out.replace(/'([^']*)'/g, "<span class=\"str\">'$1'</span>")
-      // Ensure anything inside a comment is styled as a comment (strip nested spans)
       out = out.replace(/#([^\n]*)/g, (_m, p1) => {
         const cleaned = String(p1).replace(/<[^>]+>/g, '')
         return '<span class="com">#' + cleaned + '</span>'
@@ -582,7 +555,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       const plain = genPlainCode()
       const colored = tokenColorize(plain)
       codeEl.innerHTML = colored
-      // Update copy button with current code
       const copyBtn = document.querySelector('.builder-copy-btn') as HTMLButtonElement | null
       if (copyBtn) {
         copyBtn.setAttribute('data-copy', plain)
@@ -598,7 +570,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
         const open = expandedIds.has(id)
         if (subwrap) subwrap.setAttribute('data-open', open ? 'true' : 'false')
         if (toggleBtn) toggleBtn.setAttribute('aria-expanded', open.toString())
-        // sync subset checkboxes to current state
         const inputs = item.querySelectorAll('input[data-sub]') as NodeListOf<HTMLInputElement>
         const parentSelected = selectedIds.has(id)
         const sel = selectedSubsets[id] || new Set<string>()
@@ -606,7 +577,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
           const sub = inp.getAttribute('data-sub') || ''
           inp.checked = parentSelected && sel.has(sub)
         })
-        // sync main checkbox visual if needed (event target already accurate)
         const main = item.querySelector('input[data-select]') as HTMLInputElement | null
         if (main && main.getAttribute('data-select') === id) {
           main.checked = selectedIds.has(id)
@@ -624,35 +594,27 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       if (dsId) {
         if (t.checked) {
           selectedIds.add(dsId)
-          // Select ALL subsets for parent selection
           selectedSubsets[dsId] = new Set<string>((subsetsByDataset[dsId] || []))
-          // Expand current, collapse others
           expandedIds.clear(); expandedIds.add(dsId)
         } else {
           selectedIds.delete(dsId)
-          // Unselect ALL subsets
           selectedSubsets[dsId].clear()
           expandedIds.delete(dsId)
         }
-        // Update UI in place for smooth animation
         syncDisclosureUI(); update(); return
       }
       if (subDsId && subValue) {
-        // Ensure parent dataset is selected when any subset is selected
         const set = selectedSubsets[subDsId] || new Set<string>()
         if (t.checked) {
           set.add(subValue)
           selectedIds.add(subDsId)
-          // Do NOT auto-select other subsets here
         } else {
           set.delete(subValue)
-          // If no subsets remain selected, unselect the parent
           if (set.size === 0) {
             selectedIds.delete(subDsId)
           }
         }
         selectedSubsets[subDsId] = set
-        // Keep current dataset expanded for visibility
         expandedIds.add(subDsId)
         syncDisclosureUI(); update(); return
       }
@@ -660,14 +622,12 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
     })
 
     mount.addEventListener('click', (e) => {
-      // Dedicated handler for sub-plus triggers
       const plusEl = (e.target as HTMLElement).closest('[data-sub-plus]') as HTMLElement | null
       if (plusEl) {
         e.preventDefault()
         e.stopPropagation()
         const key = plusEl.getAttribute('data-sub-plus') || ''
         if (key) {
-          // close any open options first
           mount.querySelectorAll<HTMLElement>('.sub-options').forEach(el => { el.hidden = true })
           const pop = mount.querySelector(`[data-sub-opts="${key}"]`) as HTMLElement | null
           if (pop) pop.hidden = false
@@ -679,7 +639,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       if (!btn) return
       const mode = btn.getAttribute('data-mode') as 'standard' | 'custom' | null
       if (mode) { return }
-      // toggle model collapsible
       const collToggle = (e.target as HTMLElement).closest('[data-coll-toggle]') as HTMLElement | null
       if (collToggle) {
         const id = collToggle.getAttribute('data-coll-toggle') || ''
@@ -699,14 +658,11 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
         syncDisclosureUI();
         return
       }
-      // fallthrough for other buttons
     })
 
-    // Allow clicking anywhere on dataset row to expand/collapse (not only arrow)
     mount.addEventListener('click', (e) => {
       const row = (e.target as HTMLElement).closest('.side-row[data-dsrow]') as HTMLElement | null
       if (!row) return
-      // ignore if clicking the checkbox or disclose button itself
       const isCheckbox = (e.target as HTMLElement).closest('input[type="checkbox"]')
       const isDiscloseBtn = (e.target as HTMLElement).closest('[data-ds-toggle]')
       if (isCheckbox || isDiscloseBtn) return
@@ -718,14 +674,12 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       syncDisclosureUI()
     })
 
-    // Allow clicking anywhere on the model options header area to expand/collapse
     mount.addEventListener('click', (e) => {
       const coll = (e.target as HTMLElement).closest('#model-coll') as HTMLElement | null
       if (!coll) return
       const head = (e.target as HTMLElement).closest('#model-coll .head') as HTMLElement | null
       const isToggleBtn = (e.target as HTMLElement).closest('#model-coll [data-coll-toggle]')
       const isInteractive = (e.target as HTMLElement).closest('#model-coll .body input, #model-coll .body button, #model-coll .body label')
-      // If clicking in header area or empty part of container (not on inputs), toggle
       if (head || (!isInteractive && !isToggleBtn && (e.target as HTMLElement).closest('#model-coll'))) {
         const open = coll.getAttribute('data-open') === 'true'
         coll.setAttribute('data-open', open ? 'false' : 'true')
@@ -734,7 +688,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       }
     })
 
-    // Handle clicks on options within the sub-options popover
     mount.addEventListener('click', (e) => {
       const opt = (e.target as HTMLElement).closest('.sub-opt-row') as HTMLButtonElement | null
       if (!opt) return
@@ -744,7 +697,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
         const sub = opt.getAttribute('data-sub') || ''
         const key = `${ds}-${sub}`
         openSplitPanels.add(key)
-        // hide the options popover
         const pop = mount.querySelector(`[data-sub-opts="${key}"]`) as HTMLElement | null
         if (pop) pop.hidden = true
         render(); update()
@@ -752,7 +704,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       }
     })
 
-    // Remove split mask via minus button
     mount.addEventListener('click', (e) => {
       const rm = (e.target as HTMLElement).closest('[data-remove-split]') as HTMLElement | null
       if (!rm) return
@@ -760,7 +711,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       const key = rm.getAttribute('data-remove-split') || ''
       if (!key) return
       const [dsId, subId] = key.split('-')
-      // close panel and delete custom split
       openSplitPanels.delete(key)
       if (customSplits[dsId] && customSplits[dsId][subId]) {
         delete customSplits[dsId][subId]
@@ -768,9 +718,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       render(); update()
     })
 
-    // copy button removed; no click handler needed
-
-    // Update only the UI of a split slider (no full rerender)
     const updateSplitUI = (splitKey: string) => {
       const [dsId, subId] = splitKey.split('-')
       const current = customSplits[dsId]?.[subId]
@@ -797,7 +744,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       if (labTest) labTest.textContent = `Test: ${current.test}%`
     }
 
-    // Add slider interaction handlers with 1% snapping and two-handle logic
     const handleSliderUpdate = (splitKey: string, handleType: 'p1' | 'p2', newPosition: number) => {
       const [dsId, subId] = splitKey.split('-')
       if (!customSplits[dsId]) customSplits[dsId] = {}
@@ -822,7 +768,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
       update()
     }
 
-    // Add mouse event listeners for sliders
     mount.addEventListener('mousedown', (e) => {
       const handle = (e.target as HTMLElement).closest('.split-handle') as HTMLElement | null
       if (!handle) return
@@ -854,7 +799,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
     render(); update()
   })()
 
-// --- Hero text auto scaling ---
 ; (() => {
   const hero = document.querySelector<HTMLElement>('.hero.hero-primary')
   const heroLeft = hero?.querySelector<HTMLElement>('.hero-left')
@@ -870,7 +814,7 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
   const MIN_SCALE = 0.65
   const MAX_SCALE_GRAPH = 1
   const MAX_SCALE_COMPACT = 1.15
-  const FILL_RATIO = 0.86 // leave space for hero-right + breathing room
+  const FILL_RATIO = 0.86
   let currentScale = (() => {
     const initial = Number.parseFloat(getComputedStyle(heroLeft).getPropertyValue('--hero-text-scale'))
     return Number.isFinite(initial) && initial > 0 ? initial : 1
@@ -916,7 +860,6 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
     const measuredHeight = heroLeft.scrollHeight
     if (!measuredHeight) return
 
-    // Base height is the un-scaled height (current measurement divided by applied scale)
     const baseHeight = measuredHeight / (currentScale || 1)
     if (!baseHeight) return
 
@@ -971,6 +914,5 @@ window.addEventListener('resize', syncHeroLock, { passive: true })
   if (heroRight) observer.observe(heroRight)
 })()
 
-// Initialize copy button functionality
 enhanceInteractions()
 

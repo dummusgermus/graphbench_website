@@ -1,6 +1,3 @@
-// In-browser graph generator and interactive 3D force graph visualizer for Combinatorial Optimization
-// Uses 3d-force-graph (Three.js + d3-force-3d) for rendering and physics
-
 import ForceGraph3D from '3d-force-graph'
 import * as THREE from 'three'
 
@@ -23,7 +20,6 @@ const SIZES: { id: SizeId; label: string; n: Record<GraphTypeId, number> }[] = [
   { id: 'large', label: 'LARGE', n: { rb: 800, er: 700, ba: 700 } },
 ]
 
-// Parameter presets per graph type and size
 type ParamMap = Record<GraphTypeId, Record<SizeId, Record<string, number>>>
 
 const PARAMS: ParamMap = {
@@ -41,11 +37,9 @@ const PARAMS: ParamMap = {
   },
 }
 
-// Utilities
 const randInt = (n: number) => Math.floor(Math.random() * n)
 const choice = <T>(arr: T[]) => arr[randInt(arr.length)]
 
-// Generators
 function genER(n: number, p: number): Graph {
   const edges: Edge[] = []
   for (let i = 0; i < n; i++) {
@@ -60,14 +54,13 @@ function genBA(n: number, m: number): Graph {
   const mm = Math.max(1, Math.min(n - 1, Math.floor(m)))
   const edges: Edge[] = []
   const degree = new Array<number>(n).fill(0)
-  // start with a small connected core (complete graph of size mm+1)
   const init = mm + 1
   for (let i = 0; i < init; i++) {
     for (let j = i + 1; j < init; j++) {
       edges.push([i, j]); degree[i]++; degree[j]++
     }
   }
-  const targets: number[] = [] // list of nodes with multiplicity = degree
+  const targets: number[] = []
   for (let i = 0; i < init; i++) {
     for (let t = 0; t < degree[i]; t++) targets.push(i)
   }
@@ -87,9 +80,6 @@ function genBA(n: number, m: number): Graph {
 }
 
 function genRB(n: number, cliques: number, tightness: number): Graph {
-  // Random Bipartite-style graph generator based on clique structure
-  // Generate a graph with multiple cliques distributed across n nodes
-  // tightness controls the probability of edges within cliques
   const edges: Edge[] = []
   const edgeSet = new Set<string>()
   
@@ -103,17 +93,14 @@ function genRB(n: number, cliques: number, tightness: number): Graph {
     }
   }
 
-  // Assign nodes to cliques
   const nodeToClique = new Array<number>(n)
   for (let i = 0; i < n; i++) {
     nodeToClique[i] = Math.floor((i * cliques) / n)
   }
 
-  // Generate edges within cliques based on tightness
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
       if (nodeToClique[i] === nodeToClique[j]) {
-        // Same clique: connect with probability based on tightness
         if (Math.random() < tightness) {
           addEdge(i, j)
         }
@@ -121,11 +108,9 @@ function genRB(n: number, cliques: number, tightness: number): Graph {
     }
   }
 
-  // Add some inter-clique edges for connectivity
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
       if (nodeToClique[i] !== nodeToClique[j]) {
-        // Different cliques: connect with lower probability
         if (Math.random() < 0.02) {
           addEdge(i, j)
         }
@@ -136,7 +121,6 @@ function genRB(n: number, cliques: number, tightness: number): Graph {
   return { numNodes: n, edges }
 }
 
-// Ensure the generated undirected graph is a single connected component
 function ensureConnected(g: Graph): Graph {
   const n = g.numNodes
   if (n <= 1) return g
@@ -182,8 +166,6 @@ function ensureConnected(g: Graph): Graph {
   }
   return { numNodes: n, edges }
 }
-
-// 3D rendering handled by ForceGraph3D (internally uses d3-force-3d)
 
 function generateGraph(graphType: GraphTypeId, size: SizeId): Graph {
   const n = SIZES.find(s => s.id === size)!.n[graphType]
@@ -288,13 +270,11 @@ function buildDropdown(id: string, labelText: string, options: { value: string; 
 
 export function initCoGraphVisualizer(opts: { mountEl: HTMLElement }) {
   const mount = opts.mountEl
-  // Container
   const container = document.createElement('div')
   container.className = 'ar-viz'
   container.style.position = 'relative'
   container.classList.add('ar-viz-abs')
 
-  // Controls
   const controls = document.createElement('div')
   controls.className = 'ar-ctrls'
 
@@ -313,7 +293,6 @@ export function initCoGraphVisualizer(opts: { mountEl: HTMLElement }) {
   controls.appendChild(graphTypeDD.wrap)
   controls.appendChild(sizeDD.wrap)
 
-  // Graph container for 3D canvas
   const graphWrap = document.createElement('div')
   graphWrap.className = 'ar-graph'
   graphWrap.style.overflow = 'hidden'
@@ -323,14 +302,12 @@ export function initCoGraphVisualizer(opts: { mountEl: HTMLElement }) {
   container.appendChild(controls)
   mount.appendChild(container)
 
-  // Build ForceGraph3D instance
   const palette = getComputedStyle(document.documentElement)
   const accentFromMount = (getComputedStyle(mount).getPropertyValue('--accent') || '').trim()
   const edgeColor = (accentFromMount || palette.getPropertyValue('--ds-g3') || '#216C7B').trim() || '#216C7B'
   const nodeColor = edgeColor
   const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--surface-0')?.trim() || '#ffffff'
   
-  // Camera distance presets (edit these to tweak zoom for each configuration)
   const SMALL_DIST = 400
 
   const ZOOMS: Record<GraphTypeId, Record<SizeId, number>> = {
@@ -353,7 +330,6 @@ export function initCoGraphVisualizer(opts: { mountEl: HTMLElement }) {
     .linkColor(() => edgeColor)
     .showNavInfo(false)
 
-  // Solid, non-transparent, perfectly round nodes
   const NODE_RADIUS = 2.4
   fg
     .nodeThreeObject(() => {
@@ -363,10 +339,8 @@ export function initCoGraphVisualizer(opts: { mountEl: HTMLElement }) {
     })
     .nodeThreeObjectExtend(false)
 
-  // Softer, de-emphasized links that render behind nodes
   fg.linkMaterial(() => new THREE.LineBasicMaterial({ color: edgeColor, transparent: true, opacity: 0.35, depthWrite: false, depthTest: true }))
 
-  // Set a reasonable initial zoom and clamp zoom range; do this ONCE
   try {
     const initialDist = getZoomFor(graphTypeDD.value() as GraphTypeId, sizeDD.value() as SizeId)
     fg.cameraPosition({ x: 0, y: 0, z: initialDist }, { x: 0, y: 0, z: 0 }, 0)
@@ -381,7 +355,6 @@ export function initCoGraphVisualizer(opts: { mountEl: HTMLElement }) {
     const graphType = graphTypeDD.value() as GraphTypeId
     const size = sizeDD.value() as SizeId
     const g = generateGraph(graphType, size)
-    // Set height from container CSS percentage
     const desiredH = Math.max(260, Math.floor(graphWrap.clientHeight || 340))
     fg.height(desiredH)
     const data = {
@@ -389,12 +362,10 @@ export function initCoGraphVisualizer(opts: { mountEl: HTMLElement }) {
       links: g.edges.map(([s, t]) => ({ source: s, target: t }))
     }
     fg.graphData(data)
-    // Ensure width fits parent; do not reset camera to preserve user zoom
     const w = Math.max(320, Math.floor((graphWrap.clientWidth || mount.clientWidth || 520)))
     fg.width(w)
   }
 
-  // Apply configured zoom whenever selectors change
   const applyConfiguredZoom = () => {
     const target = getZoomFor(graphTypeDD.value() as GraphTypeId, sizeDD.value() as SizeId)
     fg.cameraPosition({ x: 0, y: 0, z: target }, { x: 0, y: 0, z: 0 }, 0)
@@ -402,21 +373,17 @@ export function initCoGraphVisualizer(opts: { mountEl: HTMLElement }) {
   graphTypeDD.onChange(() => applyConfiguredZoom())
   sizeDD.onChange(() => applyConfiguredZoom())
 
-  // Wire events
   graphTypeDD.onChange(() => regen())
   sizeDD.onChange(() => regen())
 
-  // Initial render
   regen()
 
-  // Handle container resize
   let resizeTm: number | null = null
   const onResize = () => {
     if (resizeTm) window.clearTimeout(resizeTm)
     resizeTm = window.setTimeout(() => {
       const w = Math.max(320, Math.floor(graphWrap.clientWidth || mount.clientWidth || 520))
       fg.width(w)
-      // Keep height fixed to CSS-defined box height to avoid jitter
       fg.height(Math.max(260, Math.floor(graphWrap.clientHeight || 340)))
     }, 150)
   }

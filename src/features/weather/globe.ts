@@ -8,16 +8,13 @@ export type WeatherGlobeOptions = {
   skin?: 'blue' | 'dark'
 }
 
-// Create a spinning earth using globe.gl and overlay a three.js sphere of nodes
 export function initWeatherGlobe(options: WeatherGlobeOptions) {
   const { mountEl, skin = 'blue' } = options
 
-  // Create container for Globe (globe.gl manages its own renderer)
   const globeContainer = document.createElement('div')
   globeContainer.className = 'wf-globe'
   mountEl.appendChild(globeContainer)
 
-  // Use textures that are known to exist in three-globe examples
   const texture = skin === 'dark' ? 'earth-night.jpg' : 'earth-blue-marble.jpg'
 
   const globe = new (Globe as any)(globeContainer, { animateIn: true })
@@ -31,9 +28,8 @@ export function initWeatherGlobe(options: WeatherGlobeOptions) {
   controls.autoRotateSpeed = 0.45
   globe.pointOfView({ lat: 10, lng: 10, altitude: 2.2 }, 0)
 
-  // Add rotating transparent clouds sphere (based on globe.gl example)
   const CLOUDS_ALT = 0.1
-  const CLOUDS_ROTATION_SPEED = -0.011 // deg/frame, slightly slower for subtle drift
+  const CLOUDS_ROTATION_SPEED = -0.011
   const CLOUDS_OPACITY = 0.9
   const base = (import.meta as any).env?.BASE_URL ?? '/'
   const cloudTextureUrls = [
@@ -78,13 +74,11 @@ export function initWeatherGlobe(options: WeatherGlobeOptions) {
   }
   tryLoadClouds()
 
-  // Create overlay Three.js scene elements attached to the same renderer/camera
   const camera: THREE.PerspectiveCamera = (globe as any).camera()
 
-  // Build a geodesic sphere of nodes using a refined icosahedron
   const group = new THREE.Group()
   const radius = 115
-  const detail = 4 // increase for finer subdivision
+  const detail = 4
   const ico = new THREE.IcosahedronGeometry(radius, detail)
 
   const pos = ico.getAttribute('position') as THREE.BufferAttribute
@@ -94,7 +88,6 @@ export function initWeatherGlobe(options: WeatherGlobeOptions) {
     vertices[i] = new THREE.Vector3().fromBufferAttribute(pos, i)
   }
 
-  // Create node meshes at each vertex
   const nodeMaterial = new THREE.MeshBasicMaterial({ color: 0x1F9274 })
   const nodeGeometry = new THREE.SphereGeometry(1.4, 12, 12)
   for (let i = 0; i < vertexCount; i++) {
@@ -104,7 +97,6 @@ export function initWeatherGlobe(options: WeatherGlobeOptions) {
     group.add(mesh)
   }
 
-  // Draw edges by using a wireframe over the geodesic sphere
   const lineMaterial = new THREE.LineBasicMaterial({ color: 0x1F9274, opacity: 0.4, transparent: true })
   const wireGeom = new THREE.WireframeGeometry(ico)
   const lineMesh = new THREE.LineSegments(wireGeom, lineMaterial)
@@ -112,21 +104,17 @@ export function initWeatherGlobe(options: WeatherGlobeOptions) {
 
   globeScene.add(group)
 
-  // Sync sizes
   const resize = () => {
     const rect = mountEl.getBoundingClientRect()
     const w = rect.width
     const h = rect.height
     ;(globe as any).width(w)
     ;(globe as any).height(h)
-    // globe.gl updates renderer + camera; keep aspect in sync as well
     camera.aspect = w / Math.max(1, h)
     camera.updateProjectionMatrix()
   }
   resize()
   window.addEventListener('resize', resize)
-
-  // Nodes rotate with the globe because the camera auto-rotates around the scene
 
   return {
     destroy() {

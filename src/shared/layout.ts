@@ -3,18 +3,11 @@ export type PageKey = 'home' | 'quickstart' | 'datasets' | 'team' | 'updates'
 type NavLink = { key?: PageKey; label: string; href: string; external?: boolean }
 
 export function getRuntimeBase(): string {
-  // Compute the site root path regardless of current page depth.
-  // Examples:
-  // - /index.html -> '/'
-  // - / -> '/'
-  // - /repo/ -> '/repo/'
-  // - /repo/pages/datasets.html -> '/repo/'
   const path = window.location.pathname
   const pagesIdx = path.indexOf('/pages/')
   if (pagesIdx !== -1) {
     return path.slice(0, pagesIdx + 1)
   }
-  // Otherwise return directory of current path (with trailing slash)
   const lastSlash = path.lastIndexOf('/')
   return lastSlash >= 0 ? path.slice(0, lastSlash + 1) : '/'
 }
@@ -93,7 +86,6 @@ export function enhanceInteractions(): void {
         await navigator.clipboard.writeText(text)
         if (btn.classList.contains('copy-btn')) {
           const originalHtml = btn.innerHTML
-          // Checkmark icon
           const checkSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>'
           btn.innerHTML = checkSvg
           setTimeout(() => { btn.innerHTML = originalHtml }, 1000)
@@ -103,7 +95,6 @@ export function enhanceInteractions(): void {
           setTimeout(() => { if (original) btn.textContent = original }, 1000)
         }
       } catch {
-        // no-op
       }
     })
   })

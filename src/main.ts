@@ -1,4 +1,3 @@
-// Deprecated SPA entry — intentionally left minimal during MPA migration.
 import './style.css'
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header>

@@ -3,7 +3,6 @@ import { resolve } from 'path'
 
 export default defineConfig(() => {
   return {
-    // Use relative paths so the app works on GitHub Pages project subpaths
     base: './',
     build: {
       rollupOptions: {

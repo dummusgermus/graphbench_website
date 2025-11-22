@@ -1,6 +1,3 @@
-// In-browser graph generator and interactive 3D force graph visualizer for Algorithmic Reasoning
-// Uses 3d-force-graph (Three.js + d3-force-3d) for rendering and physics
-
 import ForceGraph3D from '3d-force-graph'
 import * as THREE from 'three'
 
@@ -39,8 +36,6 @@ const SIZES: { id: SizeId; label: string; n: number }[] = [
   { id: 'test', label: 'Test (n = 128)', n: 128 },
 ]
 
-// Parameter presets per problem and distribution (shared across sizes)
-// These are reasonable demo defaults; they can be tuned later.
 type ParamMap = Record<ProblemId, Partial<Record<DistributionId, Record<string, number>>>>
 
 const PARAMS: ParamMap = {
@@ -102,11 +97,9 @@ const PARAMS: ParamMap = {
   },
 }
 
-// Utilities
 const randInt = (n: number) => Math.floor(Math.random() * n)
 const choice = <T>(arr: T[]) => arr[randInt(arr.length)]
 
-// Generators
 function genER(n: number, p: number): Graph {
   const edges: Edge[] = []
   for (let i = 0; i < n; i++) {
@@ -150,14 +143,13 @@ function genBA(n: number, m: number): Graph {
   const mm = Math.max(1, Math.min(n - 1, Math.floor(m)))
   const edges: Edge[] = []
   const degree = new Array<number>(n).fill(0)
-  // start with a small connected core (complete graph of size mm+1)
   const init = mm + 1
   for (let i = 0; i < init; i++) {
     for (let j = i + 1; j < init; j++) {
       edges.push([i, j]); degree[i]++; degree[j]++
     }
   }
-  const targets: number[] = [] // list of nodes with multiplicity = degree
+  const targets: number[] = []
   for (let i = 0; i < init; i++) {
     for (let t = 0; t < degree[i]; t++) targets.push(i)
   }
@@ -206,7 +198,6 @@ function genDBA(n: number, m1: number, m2: number, p: number): Graph {
 }
 
 function genPLC(n: number, m: number, p: number): Graph {
-  // Holme–Kim model approximation
   const edges: Edge[] = []
   const neighbors: number[][] = Array.from({ length: n }, () => [])
   const degree = new Array<number>(n).fill(0)
@@ -219,7 +210,6 @@ function genPLC(n: number, m: number, p: number): Graph {
   const addEdge = (a: number, b: number) => {
     if (a === b) return false
     const i = Math.min(a, b), j = Math.max(a, b)
-    // check existing
     for (const x of neighbors[i]) if (x === j) return false
     edges.push([i, j]); neighbors[i].push(j); neighbors[j].push(i); degree[i]++; degree[j]++
     return true
@@ -276,7 +266,6 @@ function genSBM(n: number, blocks: number, pIn: number, pOut: number): Graph {
   return { numNodes: n, edges }
 }
 
-// Ensure the generated undirected graph is a single connected component
 function ensureConnected(g: Graph): Graph {
   const n = g.numNodes
   if (n <= 1) return g
@@ -322,8 +311,6 @@ function ensureConnected(g: Graph): Graph {
   }
   return { numNodes: n, edges }
 }
-
-// 3D rendering handled by ForceGraph3D (internally uses d3-force-3d)
 
 function generateGraph(dist: DistributionId, problem: ProblemId, n: number): Graph {
   const params = PARAMS[problem][dist] || {}
@@ -403,12 +390,12 @@ function buildDropdown(id: string, labelText: string, options: { value: string; 
       item.addEventListener('click', (e) => {
         e.preventDefault()
         if (current !== opt.value) {
-          const prev = menu.querySelector('.ar-dd-item.selected') as HTMLElement | null
-          if (prev) prev.classList.remove('selected')
-          current = opt.value
-          item.classList.add('selected')
-          setBtnText()
-          listeners.forEach(cb => cb(current))
+      const prev = menu.querySelector('.ar-dd-item.selected') as HTMLElement | null
+      if (prev) prev.classList.remove('selected')
+      current = opt.value
+      item.classList.add('selected')
+      setBtnText()
+      listeners.forEach(cb => cb(current))
         }
         closeMenu()
       })
@@ -437,7 +424,6 @@ function buildDropdown(id: string, labelText: string, options: { value: string; 
     onChange: (cb) => { listeners.push(cb) },
     setVisible: (allowedValues: string[]) => {
       const allowed = allOptions.filter(o => allowedValues.includes(o.value))
-      // If current not allowed, set to first allowed and notify
       const currentAllowed = allowed.some(o => o.value === current)
       buildItems(allowed)
       if (!currentAllowed && allowed.length > 0) {
@@ -453,13 +439,11 @@ function buildDropdown(id: string, labelText: string, options: { value: string; 
 
 export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
   const mount = opts.mountEl
-  // Container
   const container = document.createElement('div')
   container.className = 'ar-viz'
   container.style.position = 'relative'
   container.classList.add('ar-viz-abs')
 
-  // Controls
   const controls = document.createElement('div')
   controls.className = 'ar-ctrls'
 
@@ -485,7 +469,6 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
   controls.appendChild(sizeDD.wrap)
   controls.appendChild(probDD.wrap)
 
-  // Graph container for 3D canvas
   const graphWrap = document.createElement('div')
   graphWrap.className = 'ar-graph'
   graphWrap.style.overflow = 'hidden'
@@ -495,16 +478,13 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
   container.appendChild(controls)
   mount.appendChild(container)
 
-  // Build ForceGraph3D instance
   const palette = getComputedStyle(document.documentElement)
   const accentFromMount = (getComputedStyle(mount).getPropertyValue('--accent') || '').trim()
   const edgeColor = (accentFromMount || palette.getPropertyValue('--ds-g3') || '#216C7B').trim() || '#216C7B'
   const nodeColor = edgeColor
   const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--surface-0')?.trim() || '#ffffff'
-  // Camera distance presets (edit these to tweak)
   const TRAIN_DIST = 240
   const TEST_DIST = 500
-  // Optional per-combination zoom overrides (edit by eye as needed)
   const ZOOMS: Record<ProblemId, Partial<Record<DistributionId, { train: number; test: number }>>> = {
     max_clique: {
       er: { train: 150, test: 400 },
@@ -579,7 +559,6 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
     .linkColor(() => edgeColor)
     .showNavInfo(false)
 
-  // Solid, non-transparent, perfectly round nodes
   const NODE_RADIUS = 2.4
   fg
     .nodeThreeObject(() => {
@@ -589,10 +568,8 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
     })
     .nodeThreeObjectExtend(false)
 
-  // Softer, de-emphasized links that render behind nodes
   fg.linkMaterial(() => new THREE.LineBasicMaterial({ color: edgeColor, transparent: true, opacity: 0.35, depthWrite: false, depthTest: true }))
 
-  // Set a reasonable initial zoom and clamp zoom range; do this ONCE
   try {
     const initialDist = getZoomFor(distDD.value() as DistributionId, probDD.value() as ProblemId, sizeDD.value() as SizeId)
     fg.cameraPosition({ x: 0, y: 0, z: initialDist }, { x: 0, y: 0, z: 0 }, 0)
@@ -603,27 +580,21 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
     }
   } catch {}
 
-  // Hook controls (no-op; we don't auto-reset camera on regen)
   try {
     const ctrls: any = fg.controls?.()
     if (ctrls && typeof ctrls.addEventListener === 'function') {
-      // Keep in case we want to react to user interactions later
       ctrls.addEventListener('start', () => {})
     }
   } catch {}
 
-  // Mutual exclusion: NWS <-> Bridge Finding
   const applyMutualExclusion = () => {
     const distVal = distDD.value() as DistributionId
     const probVal = probDD.value() as ProblemId
     if (distVal === 'nws') {
-      // Hide bridge_finding
       probDD.setVisible(PROBLEMS.filter(p => p.id !== 'bridge_finding').map(p => p.id))
     } else if (probVal === 'bridge_finding') {
-      // Hide nws
       distDD.setVisible(DISTRIBUTIONS.filter(d => d.id !== 'nws').map(d => d.id))
     } else {
-      // Show all
       probDD.setVisible(PROBLEMS.map(p => p.id))
       distDD.setVisible(DISTRIBUTIONS.map(d => d.id))
     }
@@ -635,7 +606,6 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
     const problem = probDD.value() as ProblemId
     const n = SIZES.find(s => s.id === sizeId)!.n
     const g = generateGraph(dist, problem, n)
-    // Set height from container CSS percentage
     const desiredH = Math.max(260, Math.floor(graphWrap.clientHeight || 340))
     fg.height(desiredH)
     const data = {
@@ -643,7 +613,6 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
       links: g.edges.map(([s, t]) => ({ source: s, target: t }))
     }
     fg.graphData(data)
-    // Ensure width fits parent; do not reset camera to preserve user zoom
     const w = Math.max(320, Math.floor((graphWrap.clientWidth || mount.clientWidth || 520)))
     fg.width(w)
   }
@@ -657,29 +626,23 @@ export function initArGraphVisualizer(opts: { mountEl: HTMLElement }) {
   probDD.onChange(() => applyConfiguredZoom())
   sizeDD.onChange(() => applyConfiguredZoom())
 
-  // Wire events
   distDD.onChange(() => { applyMutualExclusion(); regen() })
   sizeDD.onChange(() => { applyMutualExclusion(); regen() })
   probDD.onChange(() => { applyMutualExclusion(); regen() })
 
-  // Initial render
   applyMutualExclusion()
   regen()
 
-  // Handle container resize
   let resizeTm: number | null = null
   const onResize = () => {
     if (resizeTm) window.clearTimeout(resizeTm)
     resizeTm = window.setTimeout(() => {
       const w = Math.max(320, Math.floor(graphWrap.clientWidth || mount.clientWidth || 520))
       fg.width(w)
-      // Keep height fixed to CSS-defined box height to avoid jitter
       fg.height(Math.max(260, Math.floor(graphWrap.clientHeight || 340)))
     }, 150)
   }
   window.addEventListener('resize', onResize, { passive: true })
-
-  // Remove dynamic observers to prevent laggy re-layout
 }
 
 
